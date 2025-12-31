@@ -1,0 +1,70 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[justification=centering]{caption}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[romanian]{babel}
+\usepackage[table]{xcolor}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{diagbox}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{shapes, arrows, positioning, circuits.logic.US, calc, fit}
+
+% Setări pagină
+\geometry{margin=2.5cm}
+
+\begin{document}
+
+% 1. Pagina de titlu
+\input{titlepage.tex}
+
+\newpage
+\tableofcontents
+\newpage
+
+% 2. Descrierea proiectului
+\section{Descrierea funcționării automatului}
+\input{description.tex}
+
+% 3. Schema bloc
+\section{Schema bloc a automatului}
+\input{block_diagram.tex}
+\newpage
+
+% 4. Organigrama
+\section{Organigrama automatului}
+\input{organigram.tex}
+
+% % 5. Ecuațiile de stare
+\section{Identificarea ecuațiilor de stare}
+\input{state_equations.tex}
+
+% TBD:
+
+% % 6. Implementare CBB + MUX
+% \section{Implementarea cu CBB JK și Multiplexoare 4:1}
+% \input{implementation_cbb.tex}
+%
+% % 7. Ieșiri
+% \section{Implementarea ieșirilor cu porți logice}
+% \input{outputs.tex}
+%
+% % 8. Organigramă cu microinstrucțiuni
+% \section{Implementarea cu microinstrucțiuni în format variabil}
+% \input{microinstructions.tex}
+%
+% % 9. Proiectarea unității de comandă microprogramată
+% \section{Proiectarea unității de comandă microprogramată}
+% \input{control_unit.tex}
+%
+% % 10. Alegerea componentelor digitale
+% \section{Alegerea componentelor digitale}
+% \input{components.tex}
+%
+% % 11. Completarea memoriei de microprogram
+% \section{Completarea memoriei de microprogram}
+% \input{memory.tex}
+
+\end{document}

@@ -1,0 +1,130 @@
+Organigrama din Figura \ref{fig:organigram} descrie fluxul logic al automatului, evidențiind cele 5 ieșiri principale generate în stările cheie.
+
+\begin{figure}[H]
+    \centering
+    \usetikzlibrary{shapes.multipart}
+    
+    % Stiluri
+    \tikzstyle{state} = [circle, draw, minimum size=1.0cm, align=center, fill=white, font=\footnotesize\bfseries, inner sep=0pt]
+    \tikzstyle{moore} = [circle split, draw, minimum size=1.1cm, align=center, fill=cyan!15, font=\footnotesize\bfseries, inner sep=1pt]
+    \tikzstyle{decision} = [diamond, draw, aspect=2.5, inner sep=0pt, minimum width=2.0cm, align=center, fill=yellow!15, font=\scriptsize]
+
+    \begin{tikzpicture}[->, >=latex', shorten >=1pt, auto, node distance=2cm, semithick, font=\footnotesize]
+
+        % --- COLOANA CENTRALĂ ---
+        \node[state] (S0) {S0\\IDLE};
+        \node[decision, below=1.5cm of S0] (d_pair) {PAIR};
+        \node[decision, below=1.5cm of d_pair] (d_ch) {CH\_BTN};
+        \node[state, below=1.5cm of d_ch] (S10) {S10\\WAIT};
+        \node[decision, below=1.5cm of S10] (d_rx) {RX\_SIG};
+        \node[decision, below=1.5cm of d_rx] (d_ptt) {PTT};
+
+        % --- RAMURA STÂNGA (Pairing) ---
+        \node[state, left=4.2cm of d_pair] (S1) {S1\\INIT};
+        \node[state, below=1cm of S1] (S2) {S2\\SCAN};
+        \node[decision, below=1cm of S2] (d_found) {RX\_SIG};
+        \node[state, left=1.5cm of d_found] (S3) {S3\\RETRY};
+        \node[state, below=1cm of d_found] (S4) {S4\\SHAKE};
+        \node[decision, below=1cm of S4] (d_hs) {HS\_OK};
+        \node[moore, below left=1.5cm and 0.5cm of d_hs] (S7) {S7\\ERR \nodepart{lower} \rule{0pt}{2.5ex}\scriptsize ERR\_LED};
+        \node[state, below right=1.5cm and 0.5cm of d_hs] (S5) {S5\\SAVE};
+        \node[state, below=1cm of S5] (S6) {S6\\SUCC};
+
+        % --- RAMURA DREAPTA (Channel & RX) ---
+        \node[state, right=2.8cm of d_ch] (S8) {S8\\CH1};
+        \node[state, below=0.7cm of S8] (S9) {S9\\CH2};
+        \node[moore, right=2.0cm of d_rx] (S11) {S11\\LSTN \nodepart{lower} \rule{0pt}{2.5ex}\scriptsize SPK\_EN\\\scriptsize RX\_LED};
+
+        % --- RAMURA JOS (Transmisie) ---
+        \node[state, below left=1.5cm and 0.5cm of d_ptt] (S12) {S12\\PRE\_TX};
+        \node[moore, below=1cm of S12] (S13) {S13\\TRSM \nodepart{lower} \rule{0pt}{2.5ex}\scriptsize MIC\_EN\\\scriptsize TX\_LED};
+        \node[decision, right=1.2cm of S13] (d_rel) {PTT};
+        \node[state, above=1cm of d_rel] (S14) {S14\\POST};
+        \node[state, right=1.0cm of S14] (S15) {S15\\LOG};
+
+        % --- CONEXIUNI ---
+        \path (S0) edge (d_pair);
+        \path (d_pair) edge node[above] {1} (S1);
+        \path (S1) edge (S2);
+        \path (S2) edge (d_found);
+        
+        % Scan Logic
+        \path (d_found) edge node[above] {0} (S3);
+        \path (S3) |- ([yshift=0.2cm]S2.west) -- (S2.west);
+        \path (S3) edge (d_found);
+        \path (d_found) edge node[right] {1} (S4);
+        \path (S4) edge (d_hs);
+        
+        % Handshake Logic
+        \draw [->] (d_hs.west) -| node[near start, above] {0} (S7.north);
+        \draw [->] (d_hs.east) -| node[near start, above] {1} (S5.north);
+        \path (S5) edge (S6);
+
+        % Idle -> Channel
+        \path (d_pair) edge node[right] {0} (d_ch);
+        \path (d_ch) edge node[above] {1} node[below, pos=0.575, font=\scriptsize, align=center] {(din CH2)} (S8);
+        \draw [->] (d_ch.east) -- ++(0.8,0) |- node[pos=0.7, below, font=\scriptsize] {(din CH1)} (S9.west);
+        \draw [->] (S8.east) -- ++(0.5,0) |- (S10);
+        \draw (S9) |- (S10);
+        \path (d_ch) edge node[right] {0} (S10);
+        \path (S10) edge (d_rx);
+        \path (d_rx) edge node[above] {1} (S11);
+        \draw [->] (S11.north) |- ([yshift=0.3cm]S11.north) -| ([xshift=0.5cm]S10.east) -- (S10.east);
+
+        % Wait -> TX Logic
+        \path (d_rx) edge node[right] {0} (d_ptt);
+        \path (d_ptt) edge node[left] {1} (S12);
+        \path (S12) edge (S13);
+        \path (S13) edge (d_rel);
+        \path (d_rel) edge node[below] {1} (S13);
+        \path (d_rel) edge node[right] {0} (S14);
+        \path (S14) edge (S15);
+
+        % --- AUTOSTRĂZI DE ÎNTOARCERE ---
+        \draw [dashed, rounded corners] (d_ptt.east) -- node[above] {0} ++(4.75, 0) coordinate(lane_right) |- (S0.east);
+        \draw [dashed, rounded corners] (S7.west) -- ++(-1.5, 0) coordinate(lane_left) |- (S0.west);
+        \draw [dashed, rounded corners] (S6.south) -- ++(0, -0.7) -| (lane_left);
+        \draw [dashed, rounded corners] (S15.east) -- ++(1, 0) -| (lane_right);
+
+    \end{tikzpicture}
+    \caption{Organigrama de tip Moore a dispozitivului de comunicații}
+    \label{fig:organigram}
+\end{figure}
+
+\subsection{Descrierea detaliată a stărilor automatului}
+
+\begin{description}
+    \item[\textbf{S0 (IDLE)}] \hfill \\
+    Este starea de repaus și punctul central de decizie. Aici sistemul monitorizează intrările (\texttt{PAIR}, \texttt{CH\_BTN}, \texttt{RX\_SIG}, \texttt{PTT}) pentru a determina modul de operare.
+
+    \item[\textbf{Ramura de Pairing (S1 - S7)}] \hfill \\
+    Această secvență este inițiată la apăsarea butonului \texttt{PAIR}:
+    \begin{itemize}
+        \item \textbf{S1 (INIT):} Inițializează variabilele necesare protocolului de împerechere.
+        \item \textbf{S2 (SCAN) și S3 (RETRY):} Dispozitivul scanează frecvențele căutând un semnal; dacă nu este găsit, trece prin \texttt{RETRY} și reia scanarea.
+        \item \textbf{S4 (SHAKE):} Odată detectat un semnal, se așteaptă confirmarea protocolului (Handshake - \texttt{HS\_OK}).
+        \item \textbf{S7 (ERR):} Stare de eroare (tip Moore). Se activează dacă handshake-ul eșuează, generând semnalul \texttt{ERR\_LED}.
+        \item \textbf{S5 (SAVE) și S6 (SUCC):} Dacă handshake-ul este valid, datele sunt salvate, iar împerecherea este marcată ca reușită.
+    \end{itemize}
+
+    \item[\textbf{Ramura de Selectare Canal (S8 - S9)}] \hfill \\
+    Accesată prin apăsarea \texttt{CH\_BTN} pentru a comuta frecvența activă:
+    \begin{itemize}
+        \item \textbf{S8 (CH1) și S9 (CH2):} Reprezintă cele două canale disponibile. Trecerea prin aceste stări actualizează canalul activ.
+    \end{itemize}
+
+    \item[\textbf{Monitorizare și Recepție (S10 - S11)}] \hfill \\
+    Gestionează traficul audio de intrare:
+    \begin{itemize}
+        \item \textbf{S10 (WAIT):} Stare intermediară care verifică prezența semnalului radio sau comanda de transmisie.
+        \item \textbf{S11 (LSTN):} Stare activă de recepție (tip Moore). Când \texttt{RX\_SIG} este detectat, automatul activează ieșirile \texttt{SPK\_EN} (difuzor) și \texttt{RX\_LED} (indicator vizual).
+    \end{itemize}
+
+    \item[\textbf{Ramura de Transmisie (S12 - S15)}] \hfill \\
+    Activată prin menținerea apăsată a butonului \texttt{PTT}:
+    \begin{itemize}
+        \item \textbf{S12 (PRE\_TX):} Pregătește circuitele de emisie.
+        \item \textbf{S13 (TRSM):} Stare activă de transmisie (tip Moore). Menține active ieșirile \texttt{MIC\_EN} (microfon) și \texttt{TX\_LED} atâta timp cât \texttt{PTT} este apăsat.
+        \item \textbf{S14 (POST) și S15 (LOG):} După eliberarea butonului, se execută operațiuni post-transmisie și logarea evenimentului înainte de revenirea în \texttt{IDLE}.
+    \end{itemize}
+\end{description}

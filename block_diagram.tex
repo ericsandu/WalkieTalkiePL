@@ -1,0 +1,110 @@
+\subsection{Schema bloc a Automatului de Stare (ASM)}
+
+Figura \ref{fig:asm_block} prezintă intrările și ieșirile unității centrale de control. Automatul primește semnale de la interfața cu utilizatorul (butoane) și de la modulul radio (semnale de stare), generând comenzi pentru componentele hardware (LED-uri, Audio).
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[auto, node distance=1.5cm, >=latex', thick]
+        % Stiluri
+        \tikzstyle{block} = [draw, rectangle, minimum height=6cm, minimum width=5cm, align=center, fill=blue!5, rounded corners]
+        \tikzstyle{input} = [coordinate]
+        \tikzstyle{output} = [coordinate]
+
+        % Blocul Central - Automatul
+        \node [block] (asm) {
+            \textbf{\large AUTOMAT DE STARE} \\[0.5em] 
+            \textbf{(ASM)} \\[1em] 
+            \textit{Unitate de Comandă} \\ 
+            \textit{Secvențială Sincronă}
+        };
+
+        % --- INTRĂRI (Stânga) ---
+        \coordinate (in_ptt) at ($(asm.north west)!0.15!(asm.south west)$);
+        \coordinate (in_pair) at ($(asm.north west)!0.30!(asm.south west)$);
+        \coordinate (in_ch) at ($(asm.north west)!0.45!(asm.south west)$);
+        \coordinate (in_rx) at ($(asm.north west)!0.60!(asm.south west)$);
+        \coordinate (in_hs) at ($(asm.north west)!0.75!(asm.south west)$);
+
+        \draw [<-] (in_ptt) -- ++(-2.5,0) node[midway, above] {PTT};
+        \draw [<-] (in_pair) -- ++(-2.5,0) node[midway, above] {PAIR};
+        \draw [<-] (in_ch) -- ++(-2.5,0) node[midway, above] {CH\_BTN};
+        \draw [<-] (in_rx) -- ++(-2.5,0) node[midway, above] {RX\_SIG};
+        \draw [<-] (in_hs) -- ++(-2.5,0) node[midway, above] {HS\_OK};
+
+        % --- IEȘIRI (Dreapta) ---
+        \coordinate (out_tx) at ($(asm.north east)!0.15!(asm.south east)$);
+        \coordinate (out_rx) at ($(asm.north east)!0.30!(asm.south east)$);
+        \coordinate (out_mic) at ($(asm.north east)!0.45!(asm.south east)$);
+        \coordinate (out_spk) at ($(asm.north east)!0.60!(asm.south east)$);
+        \coordinate (out_err) at ($(asm.north east)!0.75!(asm.south east)$);
+
+        \draw [->] (out_tx) -- ++(2.5,0) node[midway, above] {TX\_LED};
+        \draw [->] (out_rx) -- ++(2.5,0) node[midway, above] {RX\_LED};
+        \draw [->] (out_mic) -- ++(2.5,0) node[midway, above] {MIC\_EN};
+        \draw [->] (out_spk) -- ++(2.5,0) node[midway, above] {SPK\_EN};
+        \draw [->] (out_err) -- ++(2.5,0) node[midway, above] {ERR\_LED};
+
+        % --- CLK și RESET ---
+        \draw [<-] (asm.north) -- ++(0,1) node[midway, right] {CLK};
+        \draw [<-] (asm.south) -- ++(0,-1) node[midway, right] {RESET};
+
+    \end{tikzpicture}
+    \caption{Schema bloc detaliată a automatului de stare pentru un singur dispozitiv.}
+    \label{fig:asm_block}
+\end{figure}
+
+\subsection{Descrierea Semnalelor}
+
+Tabelul de mai jos detaliază rolul fiecărui semnal identificat în schema bloc:
+
+\begin{description}
+    \item[Intrări (Senzori și Interfață):] \hfill
+    \begin{itemize}
+        \item \textbf{PTT (Push-To-Talk):} Semnal activ pe '1' când utilizatorul ține apăsat butonul de vorbire. Comandă tranziția din starea de ascultare în cea de emisie.
+        \item \textbf{PAIR:} Buton monostabil pentru inițierea procedurii de împerechere cu un alt dispozitiv.
+        \item \textbf{CH\_BTN:} Buton pentru comutarea ciclică a canalului de comunicație (Canal 1 / Canal 2).
+        \item \textbf{RX\_SIG:} Semnal digital venit de la modulul receptor radio care indică prezența unei purtătoare (carrier detect) sau a unui semnal audio valid pe canalul curent.
+        \item \textbf{HS\_OK (Handshake OK):} Semnal logic generat de subsistemul de decodificare a datelor. Devine '1' doar dacă, în timpul modului de Pairing, se primește un cod corect de confirmare de la celălalt dispozitiv.
+    \end{itemize}
+    
+    \item[Ieșiri (Comenzi Hardware):] \hfill
+    \begin{itemize}
+        \item \textbf{TX\_LED:} Activează LED-ul roșu pentru a indica transmisia în curs.
+        \item \textbf{RX\_LED:} Activează LED-ul verde pentru a indica recepția unui semnal sau un canal liber.
+        \item \textbf{MIC\_EN:} Activează preamplificatorul de microfon și modulatorul emițătorului.
+        \item \textbf{SPK\_EN:} Activează amplificatorul audio final pentru difuzor (Speaker).
+        \item \textbf{ERR\_LED:} LED galben/intermitent care semnalizează eșecul procesului de pairing (timeout sau lipsă handshake).
+    \end{itemize}
+\end{description}
+
+
+\subsection{Interacțiunea în Modul Pairing}
+
+Pentru a justifica complexitatea automatului și necesitatea stării de "Handshake" (\texttt{HS\_OK}), Figura \ref{fig:pairing_system} ilustrează interacțiunea conceptuală între două unități.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[auto, node distance=3cm, >=latex', thick]
+        \tikzstyle{device} = [draw, rectangle, minimum height=3cm, minimum width=2.5cm, align=center, fill=gray!10]
+        
+        % Dispozitiv A
+        \node [device] (devA) {\textbf{Walkie Talkie A} \\ (Master / Inițiator)};
+        
+        % Dispozitiv B
+        \node [device, right=5cm of devA] (devB) {\textbf{Walkie Talkie B} \\ (Slave / Target)};
+        
+        % Săgeți de comunicare RF
+        \draw [->, dashed, line width=1.5pt] ($(devA.east)+(0,0.5)$) -- node[above] {Semnal "PAIR\_REQ"} ($(devB.west)+(0,0.5)$);
+        \draw [->, dashed, line width=1.5pt] ($(devB.west)+(0,-0.5)$) -- node[below] {Răspuns "ACK"} ($(devA.east)+(0,-0.5)$);
+        
+        % Logică internă - descrieri sub dispozitive
+        \node [below=0.5cm of devA, text width=4cm, align=center, font=\small] {ASM-ul așteaptă \\ \texttt{RX\_SIG} specific};
+        \node [below=0.5cm of devB, text width=4cm, align=center, font=\small] {Detectează cererea \\ și răspunde};
+        
+        % Vizualizare generare HS_OK
+        \node [above=0.5cm of devA, text width=6cm, align=center, font=\small] {\textit{Generare HS\_OK intern}};
+
+    \end{tikzpicture}
+    \caption{Schema logică a procesului de Pairing. Semnalul \texttt{HS\_OK} este generat intern de Dispozitivul A doar la recepția confirmării (ACK) de la Dispozitivul B.}
+    \label{fig:pairing_system}
+\end{figure}

@@ -1,0 +1,169 @@
+Pentru a transpune organigrama într-un circuit digital secvențial, fiecărei stări i s-a alocat un cod binar unic pe 4 biți: $Q_3 Q_2 Q_1 Q_0$.
+
+\subsection{Codificarea Stărilor}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|c|}
+        \hline
+        \textbf{Stare} & \textbf{Simbol} & \textbf{Cod ($Q_3 Q_2 Q_1 Q_0$)} \\
+        \hline
+        S0 & IDLE & 0000 \\
+        \hline
+        S1 & INIT & 0001 \\
+        \hline
+        S2 & SCAN & 0010 \\
+        \hline
+        S3 & RETRY & 0011 \\
+        \hline
+        S4 & SHAKE & 0100 \\
+        \hline
+        S5 & SAVE & 0101 \\
+        \hline
+        S6 & SUCC & 0110 \\
+        \hline
+        S7 & ERR & 0111 \\
+        \hline
+        S8 & CH1 & 1000 \\
+        \hline
+        S9 & CH2 & 1001 \\
+        \hline
+        S10 & WAIT & 1010 \\
+        \hline
+        S11 & LSTN & 1011 \\
+        \hline
+        S12 & PRE\_TX & 1100 \\
+        \hline
+        S13 & TRSM & 1101 \\
+        \hline
+        S14 & POST & 1110 \\
+        \hline
+        S15 & LOG & 1111 \\
+        \hline
+    \end{tabular}
+    \caption{Tabela de alocare a stărilor}
+\end{table}
+
+\subsection{Definirea Variabilelor de Intrare}
+
+Ecuațiile de tranziție depind de starea curentă și de intrările asincrone. Pentru simplificarea tabelelor, vom folosi următoarele notații:
+
+\begin{itemize}
+    \item $P$ = Buton \texttt{PAIR}
+    \item $C$ = Buton \texttt{CH\_BTN}
+    \item $R$ = Semnal \texttt{RX\_SIG}
+    \item $H$ = Semnal \texttt{HS\_OK}
+    \item $T$ = Buton \texttt{PTT}
+\end{itemize}
+
+\subsection{Hărțile Karnaugh pentru Funcția de Stare Următoare}
+
+Vom determina funcțiile logice $Q_3^+, Q_2^+, Q_1^+, Q_0^+$ completând hărțile Karnaugh. Celulele conțin condiția logică (intrare) necesară pentru ca bitul respectiv să devină '1' în starea următoare.
+
+% --- HARTĂ PENTRU Q3 ---
+\subsubsection*{Ecuația pentru $Q_3$}
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        \rowcolor{gray!20}
+        \diagbox{$Q_1 Q_0$}{$Q_3 Q_2$} & \textbf{00} & \textbf{01} & \textbf{11} & \textbf{10} \\ \hline
+        \textbf{00} & $\bar{P}$ & $H$ & $1$ & $1$ \\ \hline 
+        \textbf{01} & $0$ & $1$ & $T$ & $1$ \\ \hline
+        \textbf{11} & $0$ & $0$ & $0$ & $1$ \\ \hline
+        \textbf{10} & $0$ & $0$ & $1$ & $R + \bar{R}T$ \\ \hline
+    \end{tabular}
+    \caption{Harta K pentru $Q_3^+$}
+\end{table}
+
+Ecuația minimizată extrasă din hartă:
+\begin{equation}
+\begin{split}
+    Q_3^+ = & \underbrace{\overline{Q_3}\overline{Q_2}\overline{Q_1}\overline{Q_0} \cdot \bar{P}}_{S0 \to S8/10} + \underbrace{\overline{Q_3}Q_2\overline{Q_1}\overline{Q_0} \cdot H}_{S4 \to S5} + \underbrace{\overline{Q_3}Q_2\overline{Q_1}Q_0}_{S5 \to S6} \\
+    & + \underbrace{Q_3\overline{Q_2}(\overline{Q_1} + Q_1Q_0 + Q_1\overline{Q_0}(R + \bar{R}T))}_{Hold\ S8, S9, S11\ \&\ S10 \to Next} \\
+    & + \underbrace{Q_3Q_2(\overline{Q_1}\overline{Q_0} + \overline{Q_1}Q_0 T + Q_1\overline{Q_0})}_{S12 \to S13,\ Hold\ S13,\ S14 \to S15}
+\end{split}
+\end{equation}
+
+% --- HARTĂ PENTRU Q2 ---
+\subsubsection*{Ecuația pentru $Q_2$}
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        \rowcolor{gray!20}
+        \diagbox{$Q_1 Q_0$}{$Q_3 Q_2$} & \textbf{00} & \textbf{01} & \textbf{11} & \textbf{10} \\ \hline
+        \textbf{00} & $0$ & $H$ & $1$ & $0$ \\ \hline
+        \textbf{01} & $0$ & $1$ & $T$ & $0$ \\ \hline
+        \textbf{11} & $0$ & $0$ & $0$ & $0$ \\ \hline
+        \textbf{10} & $R$ & $0$ & $1$ & $\bar{R}T$ \\ \hline
+    \end{tabular}
+    \caption{Harta K pentru $Q_2^+$}
+\end{table}
+
+Ecuația minimizată extrasă din hartă:
+\begin{equation}
+\begin{split}
+    Q_2^+ = & \underbrace{\overline{Q_3}\overline{Q_2}Q_1\overline{Q_0} \cdot R}_{S2 \to S4} + \underbrace{\overline{Q_3}Q_2\overline{Q_1}\overline{Q_0} \cdot H}_{S4 \to S5} + \underbrace{\overline{Q_3}Q_2\overline{Q_1}Q_0}_{S5 \to S6} \\
+    & + \underbrace{Q_3\overline{Q_2}Q_1\overline{Q_0} \cdot \bar{R}T}_{S10 \to S12} + \underbrace{Q_3Q_2(\overline{Q_1}\overline{Q_0} + Q_1\overline{Q_0} + \overline{Q_1}Q_0 T)}_{S12, S13, S14 \text{ Logic}}
+\end{split}
+\end{equation}
+
+% --- HARTĂ PENTRU Q1 ---
+\subsubsection*{Ecuația pentru $Q_1$}
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        \rowcolor{gray!20}
+        \diagbox{$Q_1 Q_0$}{$Q_3 Q_2$} & \textbf{00} & \textbf{01} & \textbf{11} & \textbf{10} \\ \hline
+        \textbf{00} & $\bar{P}\bar{C}$ & $\bar{H}$ & $0$ & $1$ \\ \hline
+        \textbf{01} & $1$ & $1$ & $\bar{T}$ & $1$ \\ \hline
+        \textbf{11} & $1$ & $0$ & $0$ & $1$ \\ \hline
+        \textbf{10} & $\bar{R}$ & $0$ & $1$ & $R$ \\ \hline
+    \end{tabular}
+    \caption{Harta K pentru $Q_1^+$}
+\end{table}
+
+Ecuația minimizată extrasă din hartă:
+\begin{equation}
+\begin{split}
+    Q_1^+ = & \underbrace{\overline{Q_3}\overline{Q_2}\overline{Q_1}\overline{Q_0} \cdot \bar{P}\bar{C}}_{S0 \to S10} + \underbrace{\overline{Q_3}\overline{Q_2}(\overline{Q_1}Q_0 + Q_1Q_0 + Q_1\overline{Q_0}\bar{R})}_{S1 \to S2,\ S3 \to S2,\ S2 \to S3} \\
+    & + \underbrace{\overline{Q_3}Q_2\overline{Q_1}\overline{Q_0} \cdot \bar{H}}_{S4 \to S7} + \underbrace{\overline{Q_3}Q_2\overline{Q_1}Q_0}_{S5 \to S6} \\
+    & + \underbrace{Q_3\overline{Q_2}(\overline{Q_1}\overline{Q_0} + \overline{Q_1}Q_0 + Q_1Q_0 + Q_1\overline{Q_0}R)}_{Channel\ Logic\ \&\ S10 \to S11} \\
+    & + \underbrace{Q_3Q_2\overline{Q_1}Q_0 \cdot \bar{T}}_{S13 \to S14} + \underbrace{Q_3Q_2Q_1\overline{Q_0}}_{S14 \to S15}
+\end{split}
+\end{equation}
+
+% --- HARTĂ PENTRU Q0 ---
+\subsubsection*{Ecuația pentru $Q_0$}
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        \rowcolor{gray!20}
+        \diagbox{$Q_1 Q_0$}{$Q_3 Q_2$} & \textbf{00} & \textbf{01} & \textbf{11} & \textbf{10} \\ \hline
+        \textbf{00} & $P$ & $H$ & $1$ & $C$ \\ \hline
+        \textbf{01} & $0$ & $0$ & $T$ & $0$ \\ \hline
+        \textbf{11} & $0$ & $0$ & $0$ & $0$ \\ \hline
+        \textbf{10} & $\bar{R}$ & $0$ & $0$ & $R$ \\ \hline
+    \end{tabular}
+    \caption{Harta K pentru $Q_0^+$}
+\end{table}
+
+Ecuația minimizată extrasă din hartă:
+\begin{equation}
+\begin{split}
+    Q_0^+ = & \underbrace{\overline{Q_3}\overline{Q_2}\overline{Q_1}\overline{Q_0} \cdot P}_{S0 \to S1} + \underbrace{\overline{Q_3}\overline{Q_2}Q_1\overline{Q_0} \cdot \bar{R}}_{S2 \to S3} + \underbrace{\overline{Q_3}Q_2\overline{Q_1}\overline{Q_0} \cdot H}_{S4 \to S5} \\
+    & + \underbrace{Q_3\overline{Q_2}\overline{Q_1}\overline{Q_0} \cdot C}_{S8 \to S9} + \underbrace{Q_3\overline{Q_2}Q_1\overline{Q_0} \cdot R}_{S10 \to S11} \\
+    & + \underbrace{Q_3Q_2(\overline{Q_1}\overline{Q_0} + Q_1\overline{Q_0} + \overline{Q_1}Q_0 T)}_{S12 \to S13, S14 \to S15, Hold\ S13}
+\end{split}
+\end{equation}

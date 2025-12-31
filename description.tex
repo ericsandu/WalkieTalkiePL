@@ -1,0 +1,24 @@
+Să se proiecteze un automat secvențial sincron care controlează
+funcționarea unui aparat portabil de emisie-recepție (Walkie-Talkie).
+Scopul automatului este de a facilitacomunicarea bidirecțională între
+două dispozitive, permițând utilizatorului să transmită și să primească un flux audio.
+
+Sistemul pornește într-o stare de așteptare (Idle/Listening), monitorizând
+semnalele de intrare. Comportamentul dispozitivului este dictat prin următoarele stări:
+
+\begin{itemize}
+    \item \textbf{Modul Normal (Receiving/Transmitting):} În starea implicită,
+    dispozitivul primește un flux audio de la cananlul său curent.
+    Dacă se apasă butonul \texttt{PTT} (Push-to-Talk), automatul trece în modul
+    de transmisie, activând microfonul și LED-ul de transmisie.
+    La eliberarea butonului, revine în modul de recepție.
+    
+    \item \textbf{Modul Pairing:} La apăsarea
+    butonului \texttt{PAIR}, dispozitivul intră într-o secvență de scanare,
+    așteptând un răspuns (handshake), urmată de o stare de succes sau eroare.
+    
+    \item \textbf{Selectarea Canalului:} Dispozitivul permite comutarea între
+    două canale salvate. Apăsarea \texttt{CH\_BTN} schimbă canalul activ,
+    indicat prin LED-uri specifice.
+\end{itemize}
+
