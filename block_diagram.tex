@@ -17,11 +17,11 @@ Figura \ref{fig:asm_block} prezintă intrările și ieșirile unității central
         };
 
         % --- INTRĂRI (Stânga) ---
-        \coordinate (in_ptt) at ($(asm.north west)!0.15!(asm.south west)$);
-        \coordinate (in_pair) at ($(asm.north west)!0.30!(asm.south west)$);
-        \coordinate (in_ch) at ($(asm.north west)!0.45!(asm.south west)$);
-        \coordinate (in_rx) at ($(asm.north west)!0.60!(asm.south west)$);
-        \coordinate (in_hs) at ($(asm.north west)!0.75!(asm.south west)$);
+        \coordinate (in_ptt) at ($(asm.north west)!0.20!(asm.south west)$);
+        \coordinate (in_pair) at ($(asm.north west)!0.35!(asm.south west)$);
+        \coordinate (in_ch) at ($(asm.north west)!0.50!(asm.south west)$);
+        \coordinate (in_rx) at ($(asm.north west)!0.65!(asm.south west)$);
+        \coordinate (in_hs) at ($(asm.north west)!0.80!(asm.south west)$);
 
         \draw [<-] (in_ptt) -- ++(-2.5,0) node[midway, above] {PTT};
         \draw [<-] (in_pair) -- ++(-2.5,0) node[midway, above] {PAIR};
@@ -30,11 +30,11 @@ Figura \ref{fig:asm_block} prezintă intrările și ieșirile unității central
         \draw [<-] (in_hs) -- ++(-2.5,0) node[midway, above] {HS\_OK};
 
         % --- IEȘIRI (Dreapta) ---
-        \coordinate (out_tx) at ($(asm.north east)!0.15!(asm.south east)$);
-        \coordinate (out_rx) at ($(asm.north east)!0.30!(asm.south east)$);
-        \coordinate (out_mic) at ($(asm.north east)!0.45!(asm.south east)$);
-        \coordinate (out_spk) at ($(asm.north east)!0.60!(asm.south east)$);
-        \coordinate (out_err) at ($(asm.north east)!0.75!(asm.south east)$);
+        \coordinate (out_tx) at ($(asm.north east)!0.20!(asm.south east)$);
+        \coordinate (out_rx) at ($(asm.north east)!0.35!(asm.south east)$);
+        \coordinate (out_mic) at ($(asm.north east)!0.50!(asm.south east)$);
+        \coordinate (out_spk) at ($(asm.north east)!0.65!(asm.south east)$);
+        \coordinate (out_err) at ($(asm.north east)!0.80!(asm.south east)$);
 
         \draw [->] (out_tx) -- ++(2.5,0) node[midway, above] {TX\_LED};
         \draw [->] (out_rx) -- ++(2.5,0) node[midway, above] {RX\_LED};
