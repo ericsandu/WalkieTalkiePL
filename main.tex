@@ -10,7 +10,7 @@
 \usepackage{amsmath}
 \usepackage{float}
 \usepackage{tikz}
-\usetikzlibrary{shapes, arrows, positioning, circuits.logic.US, calc, fit}
+\usetikzlibrary{shapes, arrows, positioning, circuits.logic.US, calc, fit, backgrounds}
 
 % Setări pagină
 \geometry{margin=2.5cm}
@@ -36,17 +36,19 @@
 % 4. Organigrama
 \section{Organigrama automatului}
 \input{organigram.tex}
+\newpage
 
 % % 5. Ecuațiile de stare
 \section{Identificarea ecuațiilor de stare}
 \input{state_equations.tex}
+\newpage
+
+% 6. Implementare CBB + MUX
+\section{Implementarea cu CBB JK și Multiplexoare 4:1}
+\input{implementation_cbb.tex}
+\newpage
 
 % TBD:
-
-% % 6. Implementare CBB + MUX
-% \section{Implementarea cu CBB JK și Multiplexoare 4:1}
-% \input{implementation_cbb.tex}
-%
 % % 7. Ieșiri
 % \section{Implementarea ieșirilor cu porți logice}
 % \input{outputs.tex}
