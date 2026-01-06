@@ -21,10 +21,13 @@
 
 % --- Q3 ---
 \subsection{Implementarea etajului $Q_3$}
-\textbf{Selectori:} $Q_1, Q_0$ (Liniile hărții). Logica intrărilor $D_i$ depinde de $Q_2$ (Coloane).
+\textbf{Selectori:} $Q_1, Q_0$ (Liniile hărții).
+Logica intrărilor $D_i$ depinde de $Q_2$ (Coloane).
 
 \begin{figure}[H]
     \centering
+    % Resizebox forces the image to fit the text width, scaling everything up
+    \resizebox{1.0\textwidth}{!}{
     \begin{tikzpicture}[font=\footnotesize]
         % --- TABELE SIDE-BY-SIDE ---
         % Tabel J (Stânga)
@@ -43,8 +46,8 @@
         };
         \node[above, green!50!black] at (tableJ.north) {\textbf{Zona J ($Q_3=0$)}};
 
-        % Tabel K (Dreapta - Spațiat)
-        \node (tableK) at (7.5,0) [anchor=north west] {
+        % Tabel K (Dreapta - Spațiat mai larg pentru a umple pagina)
+        \node (tableK) at (8.0,0) [anchor=north west] {
             \renewcommand{\arraystretch}{\tablestretch}
             \tablefontsize
             \begin{tabular}{|c|c|c|}
@@ -60,18 +63,19 @@
         \node[above, red!50!black] at (tableK.north) {\textbf{Zona K ($Q_3=1$)}};
 
         % --- SCHEMA LOGICĂ ---
-        \def\topY{-6.0}     
-        \def\botY{-10.5}    
-        \def\midY{-8.25}    
-        \def\muxX{3.0}
-        \def\cbbX{10.0}
+        % Adjusted Y coordinates to stretch vertical space
+        \def\topY{-7.5}     
+        \def\botY{-12.5}    
+        \def\midY{-10.0}    
+        \def\muxX{3.5}
+        \def\cbbX{11.0}
         \def\pinOffset{0.6}
 
         % Componente cu Text ÎNĂUNTRU
         \node[mux] (muxJ) at (\muxX, \topY) {MUX-J\\4:1};
         \node[mux] (muxK) at (\muxX, \botY) {MUX-K\\4:1};
         \node[cbb] (jk) at (\cbbX, \midY) {CBB JK};
-
+        
         % Conexiuni MUX -> CBB (90 grade)
         \draw[wire] (muxJ.east) -- ++(1.5,0) |- ($(jk.west)+(0,\pinOffset)$) node[pos=0.7, above] {$J_3$};
         \draw[wire] (muxK.east) -- ++(1.5,0) |- ($(jk.west)+(0,-\pinOffset)$) node[pos=0.7, above] {$K_3$};
@@ -84,7 +88,6 @@
             -0.5/10/$0$,
             -1.5/11/$0$
         } {
-            % Linia se desenează spre stânga (-0.8). Eticheta este pusă la mijloc (midway) și deasupra (above).
             \draw (muxJ.west) ++(0, \i*\muxPinSpacing) -- node[midway, above, font=\tiny, inner sep=1pt] {\lbl} ++(-0.8, 0) coordinate(startline);
             \node[left, align=right] at (startline) {\small \val};
         }
@@ -109,6 +112,7 @@
         \draw[thick, <-] (muxK.south) -- ++(0, -0.5) node[below] {$Q_1, Q_0$};
 
     \end{tikzpicture}
+    } % End resizebox
     \caption{Implementarea grafică a etajului $Q_3$}
 \end{figure}
 
@@ -116,10 +120,12 @@
 
 % --- Q2 ---
 \subsection{Implementarea etajului $Q_2$}
-\textbf{Selectori:} $Q_1, Q_0$ (Liniile hărții). Logica intrărilor $D_i$ depinde de $Q_3$ (Coloane).
+\textbf{Selectori:} $Q_1, Q_0$ (Liniile hărții).
+Logica intrărilor $D_i$ depinde de $Q_3$ (Coloane).
 
 \begin{figure}[H]
     \centering
+    \resizebox{1.0\textwidth}{!}{
     \begin{tikzpicture}[font=\footnotesize]
         % Tabel J
         \node (tableJ) at (0,0) [anchor=north west] {
@@ -138,7 +144,7 @@
         \node[above, green!50!black] at (tableJ.north) {\textbf{Zona J ($Q_2=0$)}};
 
         % Tabel K
-        \node (tableK) at (7.5,0) [anchor=north west] {
+        \node (tableK) at (8.0,0) [anchor=north west] {
             \renewcommand{\arraystretch}{\tablestretch}
             \tablefontsize
             \begin{tabular}{|c|c|c|}
@@ -153,15 +159,14 @@
         };
         \node[above, red!50!black] at (tableK.north) {\textbf{Zona K ($Q_2=1$)}};
 
-        % Parametri
-        \def\topY{-6.0} \def\botY{-10.5} \def\midY{-8.25}
-        \def\muxX{3.0} \def\cbbX{10.0} \def\pinOffset{0.6} \def\muxPinSpacing{0.65}
+        % Parametri Expansion
+        \def\topY{-7.5} \def\botY{-12.5} \def\midY{-10.0}
+        \def\muxX{3.5} \def\cbbX{11.0} \def\pinOffset{0.6} \def\muxPinSpacing{0.65}
 
         % Componente
         \node[mux] (muxJ) at (\muxX, \topY) {MUX-J\\4:1};
         \node[mux] (muxK) at (\muxX, \botY) {MUX-K\\4:1};
         \node[cbb] (jk) at (\cbbX, \midY) {CBB JK};
-
         % Conexiuni
         \draw[wire] (muxJ.east) -- ++(1.5,0) |- ($(jk.west)+(0,\pinOffset)$) node[pos=0.7, above] {$J_2$};
         \draw[wire] (muxK.east) -- ++(1.5,0) |- ($(jk.west)+(0,-\pinOffset)$) node[pos=0.7, above] {$K_2$};
@@ -173,7 +178,8 @@
             -0.5/10/$\overline{Q_3} \cdot R + Q_3 \cdot \bar{R}T$,
             -1.5/11/$\overline{Q_3} \cdot R$
         } {
-            \draw (muxJ.west) ++(0, \i*\muxPinSpacing) -- node[midway, above, font=\tiny, inner sep=1pt] {\lbl} ++(-0.8, 0) coordinate(startline);
+            \draw (muxJ.west) 
+            ++(0, \i*\muxPinSpacing) -- node[midway, above, font=\tiny, inner sep=1pt] {\lbl} ++(-0.8, 0) coordinate(startline);
             \node[left, align=right] at (startline) {\small \val};
         }
         \foreach \i/\lbl/\val in {
@@ -191,6 +197,7 @@
         \draw[thick] (muxJ.south) -- (muxK.north);
         \draw[thick, <-] (muxK.south) -- ++(0, -0.5) node[below] {$Q_1, Q_0$};
     \end{tikzpicture}
+    }
     \caption{Implementarea grafică a etajului $Q_2$}
 \end{figure}
 
@@ -198,12 +205,14 @@
 
 % --- Q1 ---
 \subsection{Implementarea etajului $Q_1$}
-\textbf{Selectori:} $Q_3, Q_2$ (Coloanele hărții). Logica intrărilor $D_i$ depinde de $Q_0$ (Linii).
+\textbf{Selectori:} $Q_3, Q_2$ (Coloanele hărții).
+Logica intrărilor $D_i$ depinde de $Q_0$ (Linii).
 
 \begin{figure}[H]
     \centering
+    \resizebox{1.0\textwidth}{!}{
     \begin{tikzpicture}[font=\footnotesize]
-        % --- TABELE SIDE-BY-SIDE (Late) ---
+        % --- TABELE SIDE-BY-SIDE ---
         % Tabel J (Stânga)
         \node (tableJ) at (0,0) [anchor=north west] {
             \renewcommand{\arraystretch}{\tablestretch}
@@ -219,13 +228,12 @@
         };
         \node[above, green!50!black] at (tableJ.north) {\textbf{Zona J ($Q_1=0$)}};
 
-        % Tabel K (Dreapta - Lângă J)
-        % Ajustat poziția X la 8.2 pentru a face loc tabelelor mai mari
-        \node (tableK) at (8.2,0) [anchor=north west] {
+        % Tabel K (Dreapta)
+        % Moved further right (x=9.0) to accommodate wider tables + scaling
+        \node (tableK) at (9.0,0) [anchor=north west] {
             \renewcommand{\arraystretch}{\tablestretch}
             \tablefontsize
             \setlength{\tabcolsep}{3pt}
-            % MĂRIT WIDTH la 2.4cm
             \begin{tabular}{|c|c|c|c|c|}
                 \hline
                 \rowcolor{red!20}
@@ -236,15 +244,14 @@
         };
         \node[above, red!50!black] at (tableK.north) {\textbf{Zona K ($Q_1=1$)}};
 
-        % Parametri
-        \def\topY{-6.0} \def\botY{-10.5} \def\midY{-8.25}
-        \def\muxX{3.5} \def\cbbX{10.5} \def\pinOffset{0.6} \def\muxPinSpacing{0.65}
+        % Parametri Expanded for Large Page Fit
+        \def\topY{-7.5} \def\botY{-12.5} \def\midY{-10.0}
+        \def\muxX{4.0} \def\cbbX{12.5} \def\pinOffset{0.6} \def\muxPinSpacing{0.65}
 
         % Componente
         \node[mux] (muxJ) at (\muxX, \topY) {MUX-J\\4:1};
         \node[mux] (muxK) at (\muxX, \botY) {MUX-K\\4:1};
         \node[cbb] (jk) at (\cbbX, \midY) {CBB JK};
-
         % Conexiuni
         \draw[wire] (muxJ.east) -- ++(1.5,0) |- ($(jk.west)+(0,\pinOffset)$) node[pos=0.7, above] {$J_1$};
         \draw[wire] (muxK.east) -- ++(1.5,0) |- ($(jk.west)+(0,-\pinOffset)$) node[pos=0.7, above] {$K_1$};
@@ -256,7 +263,8 @@
             -0.5/10/$1$, 
             -1.5/11/$Q_0 \cdot \bar{T}$
         } {
-            \draw (muxJ.west) ++(0, \i*\muxPinSpacing) -- node[midway, above, font=\tiny, inner sep=1pt] {\lbl} ++(-0.8, 0) coordinate(startline);
+            \draw (muxJ.west) ++(0, 
+            \i*\muxPinSpacing) -- node[midway, above, font=\tiny, inner sep=1pt] {\lbl} ++(-0.8, 0) coordinate(startline);
             \node[left, align=right] at (startline) {\small \val};
         }
         \foreach \i/\lbl/\val in {
@@ -274,6 +282,7 @@
         \draw[thick] (muxJ.south) -- (muxK.north);
         \draw[thick, <-] (muxK.south) -- ++(0, -0.5) node[below] {$Q_3, Q_2$};
     \end{tikzpicture}
+    }
     \caption{Implementarea grafică a etajului $Q_1$}
 \end{figure}
 
@@ -281,12 +290,14 @@
 
 % --- Q0 ---
 \subsection{Implementarea etajului $Q_0$}
-\textbf{Selectori:} $Q_3, Q_2$ (Coloanele hărții). Logica intrărilor $D_i$ depinde de $Q_1$ (Linii).
+\textbf{Selectori:} $Q_3, Q_2$ (Coloanele hărții).
+Logica intrărilor $D_i$ depinde de $Q_1$ (Linii).
 
 \begin{figure}[H]
     \centering
+    \resizebox{1.0\textwidth}{!}{
     \begin{tikzpicture}[font=\footnotesize]
-        % --- TABELE SIDE-BY-SIDE (Late) ---
+        % --- TABELE SIDE-BY-SIDE ---
         % Tabel J
         \node (tableJ) at (0,0) [anchor=north west] {
             \renewcommand{\arraystretch}{\tablestretch}
@@ -303,11 +314,10 @@
         \node[above, green!50!black] at (tableJ.north) {\textbf{Zona J ($Q_0=0$)}};
 
         % Tabel K
-        \node (tableK) at (8.2,0) [anchor=north west] {
+        \node (tableK) at (9.0,0) [anchor=north west] {
             \renewcommand{\arraystretch}{\tablestretch}
             \tablefontsize
             \setlength{\tabcolsep}{3pt}
-            % MĂRIT WIDTH la 2.4cm
             \begin{tabular}{|c|c|c|c|c|}
                 \hline
                 \rowcolor{red!20}
@@ -318,15 +328,14 @@
         };
         \node[above, red!50!black] at (tableK.north) {\textbf{Zona K ($Q_0=1$)}};
 
-        % Parametri
-        \def\topY{-6.0} \def\botY{-10.5} \def\midY{-8.25}
-        \def\muxX{3.5} \def\cbbX{10.5} \def\pinOffset{0.6} \def\muxPinSpacing{0.65}
+        % Parametri Expanded
+        \def\topY{-7.5} \def\botY{-12.5} \def\midY{-10.0}
+        \def\muxX{4.0} \def\cbbX{12.5} \def\pinOffset{0.6} \def\muxPinSpacing{0.65}
 
         % Componente
         \node[mux] (muxJ) at (\muxX, \topY) {MUX-J\\4:1};
         \node[mux] (muxK) at (\muxX, \botY) {MUX-K\\4:1};
         \node[cbb] (jk) at (\cbbX, \midY) {CBB JK};
-
         % Conexiuni
         \draw[wire] (muxJ.east) -- ++(1.5,0) |- ($(jk.west)+(0,\pinOffset)$) node[pos=0.7, above] {$J_0$};
         \draw[wire] (muxK.east) -- ++(1.5,0) |- ($(jk.west)+(0,-\pinOffset)$) node[pos=0.7, above] {$K_0$};
@@ -338,7 +347,8 @@
             -0.5/10/$Q_1 \cdot R$, 
             -1.5/11/$1$
         } {
-            \draw (muxJ.west) ++(0, \i*\muxPinSpacing) -- node[midway, above, font=\tiny, inner sep=1pt] {\lbl} ++(-0.8, 0) coordinate(startline);
+            \draw (muxJ.west) 
+            ++(0, \i*\muxPinSpacing) -- node[midway, above, font=\tiny, inner sep=1pt] {\lbl} ++(-0.8, 0) coordinate(startline);
             \node[left, align=right] at (startline) {\small \val};
         }
         \foreach \i/\lbl/\val in {
@@ -356,5 +366,6 @@
         \draw[thick] (muxJ.south) -- (muxK.north);
         \draw[thick, <-] (muxK.south) -- ++(0, -0.5) node[below] {$Q_3, Q_2$};
     \end{tikzpicture}
+    }
     \caption{Implementarea grafică a etajului $Q_0$}
 \end{figure}
