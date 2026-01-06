@@ -1,5 +1,3 @@
-\section*{Momentan incorect: to be fixed}
-
 % ==================================================
 % DEFINIȚII STILURI GLOBALE (TIKZ)
 % ==================================================
@@ -37,8 +35,8 @@
                 \hline
                 \rowcolor{green!20}
                 \diagbox[width=2.2cm]{$Q_1 Q_0$}{$Q_3 Q_2$} & \textbf{00} & \textbf{01} \\ \hline
-                \textbf{00} ($D_0$) & $\bar{P}$ & $H$ \\ \hline
-                \textbf{01} ($D_1$) & $0$ & $1$ \\ \hline
+                \textbf{00} ($D_0$) & $\bar{P}$ & $0$ \\ \hline
+                \textbf{01} ($D_1$) & $0$ & $0$ \\ \hline
                 \textbf{11} ($D_3$) & $0$ & $0$ \\ \hline
                 \textbf{10} ($D_2$) & $0$ & $0$ \\ \hline
             \end{tabular}
@@ -54,7 +52,7 @@
                 \rowcolor{red!20}
                 \diagbox[width=2.2cm]{$Q_1 Q_0$}{$Q_3 Q_2$} & \textbf{11} & \textbf{10} \\ \hline
                 \textbf{00} ($D_0$) & $0$ & $0$ \\ \hline
-                \textbf{01} ($D_1$) & $\bar{T}$ & $0$ \\ \hline
+                \textbf{01} ($D_1$) & $0$ & $0$ \\ \hline
                 \textbf{11} ($D_3$) & $1$ & $0$ \\ \hline
                 \textbf{10} ($D_2$) & $0$ & $\bar{R}\bar{T}$ \\ \hline
             \end{tabular}
@@ -81,9 +79,9 @@
         % Intrări MUX J
         \def\muxPinSpacing{0.65}
         \foreach \i/\lbl/\val in {
-            1.5/00/$\bar{P}\overline{Q_2} + H Q_2$, 
-            0.5/01/$Q_2$, 
-            -0.5/10/$0$, 
+          1.5/00/$\overline{Q_2} \cdot \bar{P}$,
+            0.5/01/$0$,
+            -0.5/10/$0$,
             -1.5/11/$0$
         } {
             % Linia se desenează spre stânga (-0.8). Eticheta este pusă la mijloc (midway) și deasupra (above).
@@ -93,9 +91,9 @@
 
         % Intrări MUX K
         \foreach \i/\lbl/\val in {
-            1.5/00/$0$, 
-            0.5/01/$Q_2 \bar{T}$, 
-            -0.5/10/$\overline{Q_2}\bar{R}\bar{T}$, 
+            1.5/00/$0$,
+            0.5/01/$0$,
+            -0.5/10/$\overline{Q_2} \cdot \bar{R}\bar{T}$,
             -1.5/11/$Q_2$
         } {
             \draw (muxK.west) ++(0, \i*\muxPinSpacing) -- node[midway, above, font=\tiny, inner sep=1pt] {\lbl} ++(-0.8, 0) coordinate(startline);
@@ -133,7 +131,7 @@
                 \diagbox[width=2.2cm]{$Q_1 Q_0$}{$Q_3 Q_2$} & \textbf{00} & \textbf{10} \\ \hline
                 \textbf{00} ($D_0$) & $0$ & $0$ \\ \hline
                 \textbf{01} ($D_1$) & $0$ & $0$ \\ \hline
-                \textbf{11} ($D_3$) & $0$ & $0$ \\ \hline
+                \textbf{11} ($D_3$) & $R$ & $0$ \\ \hline
                 \textbf{10} ($D_2$) & $R$ & $\bar{R}T$ \\ \hline
             \end{tabular}
         };
@@ -147,8 +145,8 @@
                 \hline
                 \rowcolor{red!20}
                 \diagbox[width=2.2cm]{$Q_1 Q_0$}{$Q_3 Q_2$} & \textbf{01} & \textbf{11} \\ \hline
-                \textbf{00} ($D_0$) & $\bar{H}$ & $0$ \\ \hline
-                \textbf{01} ($D_1$) & $0$ & $\bar{T}$ \\ \hline
+                \textbf{00} ($D_0$) & $0$ & $0$ \\ \hline
+                \textbf{01} ($D_1$) & $0$ & $0$ \\ \hline
                 \textbf{11} ($D_3$) & $1$ & $1$ \\ \hline
                 \textbf{10} ($D_2$) & $1$ & $0$ \\ \hline
             \end{tabular}
@@ -172,15 +170,15 @@
         \foreach \i/\lbl/\val in {
             1.5/00/$0$,
             0.5/01/$0$,
-            -0.5/10/$R\overline{Q_3} + \bar{R}T Q_3$,
-            -1.5/11/$0$
+            -0.5/10/$\overline{Q_3} \cdot R + Q_3 \cdot \bar{R}T$,
+            -1.5/11/$\overline{Q_3} \cdot R$
         } {
             \draw (muxJ.west) ++(0, \i*\muxPinSpacing) -- node[midway, above, font=\tiny, inner sep=1pt] {\lbl} ++(-0.8, 0) coordinate(startline);
             \node[left, align=right] at (startline) {\small \val};
         }
         \foreach \i/\lbl/\val in {
-            1.5/00/$\bar{H}\overline{Q_3}$,
-            0.5/01/$\bar{T} Q_3$,
+            1.5/00/$0$,
+            0.5/01/$0$,
             -0.5/10/$\overline{Q_3}$,
             -1.5/11/$1$
         } {
@@ -209,10 +207,8 @@
         % Tabel J (Stânga)
         \node (tableJ) at (0,0) [anchor=north west] {
             \renewcommand{\arraystretch}{\tablestretch}
-            % Font standard
             \tablefontsize
             \setlength{\tabcolsep}{3pt}
-            % MĂRIT WIDTH la 2.4cm
             \begin{tabular}{|c|c|c|c|c|}
                 \hline
                 \rowcolor{green!20}
@@ -234,7 +230,7 @@
                 \hline
                 \rowcolor{red!20}
                 \diagbox[width=2.4cm]{$Q_1 Q_0$}{$Q_3 Q_2$} & \textbf{00} & \textbf{01} & \textbf{11} & \textbf{10} \\ \hline
-                \textbf{11} & $0$ & $1$ & $1$ & $0$ \\ \hline
+                \textbf{11} & $R$ & $1$ & $1$ & $0$ \\ \hline
                 \textbf{10} & $R$ & $1$ & $0$ & $\bar{R}$ \\ \hline
             \end{tabular}
         };
@@ -255,18 +251,18 @@
 
         % Intrări
         \foreach \i/\lbl/\val in {
-            1.5/00/$\bar{P}\bar{C} + Q_0$, 
-            0.5/01/$\bar{H} + Q_0$, 
+            1.5/00/$Q_0 + \bar{P}\bar{C}$,
+            0.5/01/$Q_0 + \bar{H}$,
             -0.5/10/$1$, 
-            -1.5/11/$\bar{T} Q_0$
+            -1.5/11/$Q_0 \cdot \bar{T}$
         } {
             \draw (muxJ.west) ++(0, \i*\muxPinSpacing) -- node[midway, above, font=\tiny, inner sep=1pt] {\lbl} ++(-0.8, 0) coordinate(startline);
             \node[left, align=right] at (startline) {\small \val};
         }
         \foreach \i/\lbl/\val in {
-            1.5/00/$R \overline{Q_0}$, 
+            1.5/00/$R$,
             0.5/01/$1$, 
-            -0.5/10/$\bar{R} \overline{Q_0}$, 
+            -0.5/10/$\overline{Q_0} \cdot \bar{R}$, 
             -1.5/11/$Q_0$
         } {
             \draw (muxK.west) ++(0, \i*\muxPinSpacing) -- node[midway, above, font=\tiny, inner sep=1pt] {\lbl} ++(-0.8, 0) coordinate(startline);
@@ -296,12 +292,11 @@
             \renewcommand{\arraystretch}{\tablestretch}
             \tablefontsize
             \setlength{\tabcolsep}{3pt}
-            % MĂRIT WIDTH la 2.4cm
             \begin{tabular}{|c|c|c|c|c|}
                 \hline
                 \rowcolor{green!20}
                 \diagbox[width=2.4cm]{$Q_1 Q_0$}{$Q_3 Q_2$} & \textbf{00} & \textbf{01} & \textbf{11} & \textbf{10} \\ \hline
-                \textbf{00} & $P$ & $H$ & $1$ & $0$ \\ \hline
+                \textbf{00} & $P$ & $1$ & $1$ & $0$ \\ \hline
                 \textbf{10} & $\bar{R}$ & $0$ & $1$ & $R$ \\ \hline
             \end{tabular}
         };
@@ -318,7 +313,7 @@
                 \rowcolor{red!20}
                 \diagbox[width=2.4cm]{$Q_1 Q_0$}{$Q_3 Q_2$} & \textbf{00} & \textbf{01} & \textbf{11} & \textbf{10} \\ \hline
                 \textbf{01} & $1$ & $1$ & $\bar{T}$ & $1$ \\ \hline
-                \textbf{11} & $1$ & $1$ & $1$ & $1$ \\ \hline
+                \textbf{11} & $R$ & $1$ & $1$ & $1$ \\ \hline
             \end{tabular}
         };
         \node[above, red!50!black] at (tableK.north) {\textbf{Zona K ($Q_0=1$)}};
@@ -338,19 +333,19 @@
 
         % Intrări
         \foreach \i/\lbl/\val in {
-            1.5/00/$P\overline{Q_1} + \bar{R} Q_1$, 
-            0.5/01/$H\overline{Q_1}$, 
-            -0.5/10/$R Q_1$, 
+          1.5/00/$\overline{Q_1} \cdot P +Q_1 \cdot \bar{R}$, 
+            0.5/01/$\overline{Q_1}$, 
+            -0.5/10/$Q_1 \cdot R$, 
             -1.5/11/$1$
         } {
             \draw (muxJ.west) ++(0, \i*\muxPinSpacing) -- node[midway, above, font=\tiny, inner sep=1pt] {\lbl} ++(-0.8, 0) coordinate(startline);
             \node[left, align=right] at (startline) {\small \val};
         }
         \foreach \i/\lbl/\val in {
-            1.5/00/$1$, 
+            1.5/00/$Q_1 + R$, 
             0.5/01/$1$, 
             -0.5/10/$1$, 
-            -1.5/11/$Q_1+\bar{T}$
+            -1.5/11/$\overline{Q_1}+\bar{T}$
         } {
             \draw (muxK.west) ++(0, \i*\muxPinSpacing) -- node[midway, above, font=\tiny, inner sep=1pt] {\lbl} ++(-0.8, 0) coordinate(startline);
             \node[left, align=right] at (startline) {\small \val};
