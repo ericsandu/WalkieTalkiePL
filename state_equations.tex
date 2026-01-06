@@ -80,10 +80,10 @@ Vom determina funcțiile logice $Q_3^+, Q_2^+, Q_1^+, Q_0^+$ completând hărți
 
 Ecuația minimizată extrasă din hartă:
 \begin{equation}
-\begin{split}
-  Q_3^+ = & \ Q_3 Q_1 + Q_3 Q_2 \overline{Q_0} + Q_3 \overline{Q_2} Q_0 \\
-        & + \overline{Q_2} \overline{Q_1} \overline{Q_0} \cdot \overline{P} + Q_3 \overline{Q_2} \cdot (R + T)
-\end{split}
+  Q_3^+ = Q_3 Q_1 + Q_3 Q_2 \overline{Q_0} +
+  Q_3 \overline{Q_2} Q_0 +
+  \overline{Q_2} \overline{Q_1} \overline{Q_0} \cdot \overline{P} +
+  Q_3 \overline{Q_2} \cdot (R + T)
 \end{equation}
 
 % --- HARTĂ PENTRU Q2 ---
@@ -106,10 +106,10 @@ Ecuația minimizată extrasă din hartă:
 
 Ecuația minimizată extrasă din hartă:
 \begin{equation}
-\begin{split}
-  Q_2^+ = & \ Q_2 \overline{Q_1} + Q_3 Q_2 \overline{Q_0} \\
-        & + \overline{Q_3} \overline{Q_2} Q_1 \cdot R + Q_3 Q_1 \overline{Q_0} \cdot \overline{R} T
-\end{split}
+  Q_2^+ = Q_2 \overline{Q_1} +
+  Q_3 Q_2 \overline{Q_0} +
+  \overline{Q_3} \overline{Q_2} Q_1 \cdot R +
+  Q_3 Q_1 \overline{Q_0} \cdot \overline{R} T
 \end{equation}
 
 
@@ -131,14 +131,17 @@ Ecuația minimizată extrasă din hartă:
     \caption{Harta K pentru $Q_1^+$}
 \end{table}
 
-Ecuația minimizată extrasă din hartă: momentan incorectă
+Ecuația minimizată extrasă din hartă:
 \begin{equation}
 \begin{split}
-    Q_1^+ = & \ \overline{Q_3}\overline{Q_2}\overline{Q_1}\overline{Q_0} \cdot \bar{P}\bar{C} \\
-            & + \overline{Q_3}\overline{Q_2}(\overline{Q_1}Q_0 + Q_1Q_0 + Q_1\overline{Q_0}\bar{R}) \\
-            & + \overline{Q_3}Q_2\overline{Q_1}\overline{Q_0} \cdot \bar{H} + \overline{Q_3}Q_2\overline{Q_1}Q_0 \\
-            & + Q_3\overline{Q_2}(\overline{Q_1}\overline{Q_0} + \overline{Q_1}Q_0 + Q_1Q_0 + Q_1\overline{Q_0}R) \\
-            & + Q_3Q_2\overline{Q_1}Q_0 \cdot \bar{T} + Q_3Q_2Q_1\overline{Q_0}
+  Q_1^+ = \overline{Q_3} \overline{Q_1} Q_0 +
+  Q_3 \overline{Q_2} \overline{Q_1} +
+  Q_3 \overline{Q_2} Q_0 +
+  Q_3 Q_2 Q_1 \overline{Q_0} + \\
+  Q_3 \overline{Q_2} \cdot R +
+  \overline{Q_3} \overline{Q_2} Q_1 \cdot \bar{R} +
+  \overline{Q_1} Q_0 \cdot \bar{T} +
+  \overline{Q_2} \overline{Q_1} \cdot \bar{P} \bar{C}
 \end{split}
 \end{equation}
 
@@ -160,12 +163,14 @@ Ecuația minimizată extrasă din hartă: momentan incorectă
     \caption{Harta K pentru $Q_0^+$}
 \end{table}
 
-Ecuația minimizată extrasă din hartă: momentan incorectă
+Ecuația minimizată extrasă din hartă:
 \begin{equation}
 \begin{split}
-    Q_0^+ = & \ \overline{Q_3}\overline{Q_2}\overline{Q_1}\overline{Q_0} \cdot P \\
-            & + \overline{Q_3}\overline{Q_2}Q_1\overline{Q_0} \cdot \bar{R} + \overline{Q_3}Q_2\overline{Q_1}\overline{Q_0} \cdot H \\
-            & + Q_3\overline{Q_2}Q_1\overline{Q_0} \cdot R \\
-            & + Q_3Q_2(\overline{Q_1}\overline{Q_0} + Q_1\overline{Q_0} + \overline{Q_1}Q_0 T)
+  Q_0^+ = Q_2 \overline{Q_1} \overline{Q_0} +
+  Q_3 Q_2 \overline{Q_0} +
+  Q_3 \overline{Q_2} Q_1 \cdot R +
+  \overline{Q_3} \overline{Q_2} Q_1 \cdot \bar{R} +
+  Q_3 Q_2 \overline{Q_1} \cdot T +
+  \overline{Q_3} \overline{Q_1} \overline{Q_0} \cdot P
 \end{split}
 \end{equation}
