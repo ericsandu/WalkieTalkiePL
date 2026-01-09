@@ -16,7 +16,7 @@ Figura \ref{fig:asm_block} prezintă intrările și ieșirile unității central
             \textit{Secvențială Sincronă}
         };
 
-        % --- INTRĂRI (Stânga) ---
+        % --- INTRĂRI ---
         \coordinate (in_ptt) at ($(asm.north west)!0.20!(asm.south west)$);
         \coordinate (in_pair) at ($(asm.north west)!0.35!(asm.south west)$);
         \coordinate (in_ch) at ($(asm.north west)!0.50!(asm.south west)$);
@@ -29,18 +29,20 @@ Figura \ref{fig:asm_block} prezintă intrările și ieșirile unității central
         \draw [<-] (in_rx) -- ++(-2.5,0) node[midway, above] {RX\_SIG};
         \draw [<-] (in_hs) -- ++(-2.5,0) node[midway, above] {HS\_OK};
 
-        % --- IEȘIRI (Dreapta) ---
+        % --- IEȘIRI ---
+        % Ieșiri care revin la utilizator
         \coordinate (out_tx) at ($(asm.north east)!0.20!(asm.south east)$);
         \coordinate (out_rx) at ($(asm.north east)!0.35!(asm.south east)$);
-        \coordinate (out_mic) at ($(asm.north east)!0.50!(asm.south east)$);
-        \coordinate (out_spk) at ($(asm.north east)!0.65!(asm.south east)$);
-        \coordinate (out_err) at ($(asm.north east)!0.80!(asm.south east)$);
+        \coordinate (out_err) at ($(asm.north east)!0.50!(asm.south east)$);
+        % Ieșiri care merg mai departe la dispizitiv
+        \coordinate (out_mic) at ($(asm.north east)!0.65!(asm.south east)$);
+        \coordinate (out_spk) at ($(asm.north east)!0.80!(asm.south east)$);
 
-        \draw [->] (out_tx) -- ++(2.5,0) node[midway, above] {TX\_LED};
-        \draw [->] (out_rx) -- ++(2.5,0) node[midway, above] {RX\_LED};
+        \draw [<-] (out_tx) -- ++(2.5,0) node[midway, above] {TX\_LED};
+        \draw [<-] (out_rx) -- ++(2.5,0) node[midway, above] {RX\_LED};
+        \draw [<-] (out_err) -- ++(2.5,0) node[midway, above] {ERR\_LED};
         \draw [->] (out_mic) -- ++(2.5,0) node[midway, above] {MIC\_EN};
         \draw [->] (out_spk) -- ++(2.5,0) node[midway, above] {SPK\_EN};
-        \draw [->] (out_err) -- ++(2.5,0) node[midway, above] {ERR\_LED};
 
         % --- CLK și RESET ---
         \draw [<-] (asm.north) -- ++(0,1) node[midway, right] {CLK};
