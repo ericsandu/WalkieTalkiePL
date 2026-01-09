@@ -1,0 +1,85 @@
+Deoarece automatul a fost proiectat având ieșiri de tip Moore (asociate stărilor, nu tranzițiilor), funcțiile de ieșire depind exclusiv de starea curentă ($Q_3 Q_2 Q_1 Q_0$).
+
+Conform organigramei și tabelelor de stare, avem următoarele asocieri:
+\begin{itemize}
+    \item \textbf{ERR\_LED} este activ doar în starea \textbf{S7 (ERR)} - cod \texttt{0111}.
+    \item \textbf{SPK\_EN} și \textbf{RX\_LED} sunt active doar în starea \textbf{S11 (LSTN)} - cod \texttt{1011}.
+    \item \textbf{MIC\_EN} și \textbf{TX\_LED} sunt active doar în starea \textbf{S13 (TRSM)} - cod \texttt{1101}.
+\end{itemize}
+
+Mai jos sunt prezentate hărțile Karnaugh și ecuațiile rezultate pentru fiecare grup de ieșiri.
+
+\subsection{Implementarea ieșirii de eroare (ERR\_LED)}
+
+Această ieșire semnalizează eșecul împerecherii. Este activă când $Q_3 Q_2 = 01$ și $Q_1 Q_0 = 11$.
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        \rowcolor{gray!20}
+        \diagbox{$Q_1 Q_0$}{$Q_3 Q_2$} & \textbf{00} & \textbf{01} & \textbf{11} & \textbf{10} \\ \hline
+        \textbf{00} & $0$ & $0$ & $0$ & $0$ \\ \hline
+        \textbf{01} & $0$ & $0$ & $0$ & $0$ \\ \hline
+        \textbf{11} & $0$ & $1$ & $0$ & $0$ \\ \hline
+        \textbf{10} & $0$ & $0$ & $0$ & $0$ \\ \hline
+    \end{tabular}
+    \caption{Harta K pentru ieșirea ERR\_LED}
+\end{table}
+
+Ecuația extrasă:
+\begin{equation}
+    ERR\_LED = \overline{Q_3} Q_2 Q_1 Q_0
+\end{equation}
+
+\subsection{Implementarea ieșirilor de recepție (SPK\_EN, RX\_LED)}
+
+Aceste semnale activează difuzorul și indicatorul vizual de recepție. Sunt active în starea S11, unde $Q_3 Q_2 = 10$ și $Q_1 Q_0 = 11$.
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        \rowcolor{gray!20}
+        \diagbox{$Q_1 Q_0$}{$Q_3 Q_2$} & \textbf{00} & \textbf{01} & \textbf{11} & \textbf{10} \\ \hline
+        \textbf{00} & $0$ & $0$ & $0$ & $0$ \\ \hline
+        \textbf{01} & $0$ & $0$ & $0$ & $0$ \\ \hline
+        \textbf{11} & $0$ & $0$ & $0$ & $1$ \\ \hline
+        \textbf{10} & $0$ & $0$ & $0$ & $0$ \\ \hline
+    \end{tabular}
+    \caption{Harta K pentru SPK\_EN și RX\_LED}
+\end{table}
+
+Ecuația extrasă:
+\begin{equation}
+    SPK\_EN = RX\_LED = Q_3 \overline{Q_2} Q_1 Q_0
+\end{equation}
+
+\subsection{Implementarea ieșirilor de transmisie (MIC\_EN, TX\_LED)}
+
+Aceste semnale activează microfonul și indicatorul vizual de emisie. Sunt active în starea S13, unde $Q_3 Q_2 = 11$ și $Q_1 Q_0 = 01$.
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        \rowcolor{gray!20}
+        \diagbox{$Q_1 Q_0$}{$Q_3 Q_2$} & \textbf{00} & \textbf{01} & \textbf{11} & \textbf{10} \\ \hline
+        \textbf{00} & $0$ & $0$ & $0$ & $0$ \\ \hline
+        \textbf{01} & $0$ & $0$ & $1$ & $0$ \\ \hline
+        \textbf{11} & $0$ & $0$ & $0$ & $0$ \\ \hline
+        \textbf{10} & $0$ & $0$ & $0$ & $0$ \\ \hline
+    \end{tabular}
+    \caption{Harta K pentru MIC\_EN și TX\_LED}
+\end{table}
+
+Ecuația extrasă:
+\begin{equation}
+    MIC\_EN = TX\_LED = Q_3 Q_2 \overline{Q_1} Q_0
+\end{equation}
+
+\vspace{1cm}
+\textbf{Observație:} Implementarea fizică a acestor ecuații se realizează folosind porți logice AND cu 4 intrări (directe sau inversate conform termenilor din ecuații).
