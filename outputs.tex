@@ -9,7 +9,7 @@ Conform organigramei și tabelelor de stare, avem următoarele asocieri:
 
 Mai jos sunt prezentate hărțile Karnaugh și ecuațiile rezultate pentru fiecare grup de ieșiri.
 
-\subsection{Implementarea ieșirii de eroare (ERR\_LED)}
+\subsection{Implementarea ieșirii de eroare}
 
 Această ieșire semnalizează eșecul împerecherii. Este activă când $Q_3 Q_2 = 01$ și $Q_1 Q_0 = 11$.
 
@@ -33,7 +33,7 @@ Ecuația extrasă:
     ERR\_LED = \overline{Q_3} Q_2 Q_1 Q_0
 \end{equation}
 
-\subsection{Implementarea ieșirilor de recepție (SPK\_EN, RX\_LED)}
+\subsection{Implementarea ieșirilor de recepție}
 
 Aceste semnale activează difuzorul și indicatorul vizual de recepție. Sunt active în starea S11, unde $Q_3 Q_2 = 10$ și $Q_1 Q_0 = 11$.
 
@@ -57,7 +57,7 @@ Ecuația extrasă:
     SPK\_EN = RX\_LED = Q_3 \overline{Q_2} Q_1 Q_0
 \end{equation}
 
-\subsection{Implementarea ieșirilor de transmisie (MIC\_EN, TX\_LED)}
+\subsection{Implementarea ieșirilor de transmisie}
 
 Aceste semnale activează microfonul și indicatorul vizual de emisie. Sunt active în starea S13, unde $Q_3 Q_2 = 11$ și $Q_1 Q_0 = 01$.
 
