@@ -103,7 +103,7 @@ Organigrama din Figura \ref{fig:organigram} descrie fluxul logic al automatului,
         \item \textbf{S1 (INIT):} Inițializează variabilele necesare protocolului de împerechere.
         \item \textbf{S2 (SCAN) și S3 (RETRY):} Dispozitivul scanează frecvențele căutând un semnal; dacă nu este găsit, trece prin \texttt{RETRY} care scanează cu o putere de transmitere crescătoare până găsește un dispozitiv.
         \item \textbf{S4 (SHAKE):} Odată detectat un semnal, se așteaptă confirmarea protocolului (Handshake - \texttt{HS\_OK}).
-        \item \textbf{S7 (ERR):} Stare de eroare (tip Moore). Se activează dacă handshake-ul eșuează, generând semnalul \texttt{ERR\_LED}.
+        \item \textbf{S7 (ERR):} Stare de eroare. Se activează dacă handshake-ul eșuează, generând semnalul \texttt{ERR\_LED}.
         \item \textbf{S5 (SAVE) și S6 (SUCC):} Dacă handshake-ul este valid, datele sunt salvate, iar împerecherea este marcată ca reușită.
     \end{itemize}
 
@@ -117,14 +117,14 @@ Organigrama din Figura \ref{fig:organigram} descrie fluxul logic al automatului,
     Gestionează traficul audio de intrare:
     \begin{itemize}
         \item \textbf{S10 (WAIT):} Stare intermediară care verifică prezența semnalului radio sau comanda de transmisie.
-        \item \textbf{S11 (LSTN):} Stare activă de recepție (tip Moore). Când \texttt{RX\_SIG} este detectat, automatul activează ieșirile \texttt{SPK\_EN} (difuzor) și \texttt{RX\_LED} (indicator vizual).
+        \item \textbf{S11 (LSTN):} Stare activă de recepție. Când \texttt{RX\_SIG} este detectat, automatul activează ieșirile \texttt{SPK\_EN} și \texttt{RX\_LED}.
     \end{itemize}
 
     \item[\textbf{Ramura de Transmisie (S12 - S15)}] \hfill \\
     Activată prin menținerea apăsată a butonului \texttt{PTT}:
     \begin{itemize}
         \item \textbf{S12 (PRE\_TX):} Pregătește circuitele de emisie.
-        \item \textbf{S13 (TRSM):} Stare activă de transmisie (tip Moore). Menține active ieșirile \texttt{MIC\_EN} (microfon) și \texttt{TX\_LED} atâta timp cât \texttt{PTT} este apăsat.
+        \item \textbf{S13 (TRSM):} Stare activă de transmisie. Menține active ieșirile \texttt{MIC\_EN} și \texttt{TX\_LED} atâta timp cât \texttt{PTT} este apăsat.
         \item \textbf{S14 (POST) și S15 (LOG):} După eliberarea butonului, se execută operațiuni post-transmisie și logarea evenimentului înainte de revenirea în \texttt{IDLE}.
     \end{itemize}
 \end{description}
