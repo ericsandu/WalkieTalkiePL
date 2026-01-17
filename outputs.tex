@@ -82,4 +82,104 @@ Ecuația extrasă:
 \end{equation}
 
 \vspace{1cm}
-\textbf{Observație:} Implementarea fizică a acestor ecuații se realizează folosind porți logice AND cu 4 intrări (directe sau inversate conform termenilor din ecuații).
+\begin{tikzpicture}[
+    circuit logic US,
+    small circuit symbols, % Reduced gate size
+    every node/.style={font=\footnotesize},
+]
+
+% =========================================================
+% 1. Error Output (S7)
+% =========================================================
+\node[anchor=west] at (-1, 3.75) {\textbf{1. Error Output (S7)}};
+
+% The 4-input AND Gate positioned at x=3
+\node[and gate, inputs={nnnn}, point right] (AND1) at (3,1.875) {};
+
+% Inputs positioned at x=0 with generous vertical spacing (0.4cm gap)
+\node (q3_1) at (0, 3) {$Q_3$};
+\node (q2_1) at (0, 2.25) {$Q_2$};
+\node (q1_1) at (0, 1.5) {$Q_1$};
+\node (q0_1) at (0, 0.75) {$Q_0$};
+
+% Wires & NOT Gate
+% Q3 -> NOT -> Input 1
+\node[not gate, point right] (NOT1) at (1.5, 3) {}; % NOT gate in the middle (x=1.5)
+\draw (q3_1) -- (NOT1.input);
+\draw (NOT1.output) -- ++(right:0.2) |- (AND1.input 1);
+
+% Q2 -> Input 2 (Direct wire, bending into input)
+\draw (q2_1) -- ++(right:1.2) |- (AND1.input 2);
+
+% Q1 -> Input 3
+\draw (q1_1) -- ++(right:1.2) |- (AND1.input 3);
+
+% Q0 -> Input 4
+\draw (q0_1) -- ++(right:1.5) |- (AND1.input 4);
+
+% Output Label
+\draw (AND1.output) -- ++(0.5,0) node[right] {\textbf{ERR\_LED}};
+
+
+% =========================================================
+% 2. Reception Output (S11)
+% =========================================================
+\node[anchor=west] at (-1, -0) {\textbf{2. Reception Output (S11)}};
+
+\node[and gate, inputs={nnnn}, point right] (AND2) at (3,-1.875) {};
+
+% Inputs for Circuit 2
+\node (q3_2) at (0, -0.75) {$Q_3$};
+\node (q2_2) at (0, -1.5) {$Q_2$};
+\node (q1_2) at (0, -2.25) {$Q_1$};
+\node (q0_2) at (0, -3) {$Q_0$};
+
+% Q3 -> Input 1
+\draw (q3_2) -- ++(right:2.25) |- (AND2.input 1);
+
+% Q2 -> NOT -> Input 2
+\node[not gate, point right] (NOT2) at (1.25, -1.5) {};
+\draw (q2_2) -- (NOT2.input);
+\draw (NOT2.output) -- ++(right:0.2) |- (AND2.input 2);
+
+% Q1 -> Input 3
+\draw (q1_2) -- ++(right:1.25) |- (AND2.input 3);
+
+% Q0 -> Input 4
+\draw (q0_2) -- ++(right:1.5) |- (AND2.input 4);
+
+% Output Label
+\draw (AND2.output) -- ++(0.5,0) node[right, align=left] {\textbf{SPK\_EN} \\ \textbf{RX\_LED}};
+
+
+% =========================================================
+% 3. Transmission Output (S13)
+% =========================================================
+\node[anchor=west] at (-1, -3.75) {\textbf{3. Transmission Output (S13)}};
+
+\node[and gate, inputs={nnnn}, point right] (AND3) at (3,-5.625) {};
+
+% Inputs for Circuit 3
+\node (q3_3) at (0, -4.5) {$Q_3$};
+\node (q2_3) at (0, -5.25) {$Q_2$};
+\node (q1_3) at (0, -6) {$Q_1$};
+\node (q0_3) at (0, -6.75) {$Q_0$};
+
+% Q3 -> Input 1
+\draw (q3_3) -- ++(right:2.25) |- (AND3.input 1);
+
+% Q2 -> Input 2
+\draw (q2_3) -- ++(right:1.25) |- (AND3.input 2);
+
+% Q1 -> NOT -> Input 3
+\node[not gate, point right] (NOT3) at (1.25, -6) {};
+\draw (q1_3) -- (NOT3.input);
+\draw (NOT3.output) -- ++(right:0.2) |- (AND3.input 3);
+
+% Q0 -> Input 4
+\draw (q0_3) -- ++(right:2.25) |- (AND3.input 4);
+
+% Output Label
+\draw (AND3.output) -- ++(0.5,0) node[right, align=left] {\textbf{MIC\_EN} \\ \textbf{TX\_LED}};
+
+\end{tikzpicture}
