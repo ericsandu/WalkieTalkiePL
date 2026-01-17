@@ -101,7 +101,7 @@ Organigrama din Figura \ref{fig:organigram} descrie fluxul logic al automatului,
     Această secvență este inițiată la apăsarea butonului \texttt{PAIR}:
     \begin{itemize}
         \item \textbf{S1 (INIT):} Inițializează variabilele necesare protocolului de împerechere.
-        \item \textbf{S2 (SCAN) și S3 (RETRY):} Dispozitivul scanează frecvențele căutând un semnal; dacă nu este găsit, trece prin \texttt{RETRY} și reia scanarea.
+        \item \textbf{S2 (SCAN) și S3 (RETRY):} Dispozitivul scanează frecvențele căutând un semnal; dacă nu este găsit, trece prin \texttt{RETRY} care scanează cu o putere de transmitere crescătoare până găsește un dispozitiv.
         \item \textbf{S4 (SHAKE):} Odată detectat un semnal, se așteaptă confirmarea protocolului (Handshake - \texttt{HS\_OK}).
         \item \textbf{S7 (ERR):} Stare de eroare (tip Moore). Se activează dacă handshake-ul eșuează, generând semnalul \texttt{ERR\_LED}.
         \item \textbf{S5 (SAVE) și S6 (SUCC):} Dacă handshake-ul este valid, datele sunt salvate, iar împerecherea este marcată ca reușită.
