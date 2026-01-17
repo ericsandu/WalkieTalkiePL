@@ -19,10 +19,11 @@
 \newcommand{\tablestretch}{1.4}
 \newcommand{\tablefontsize}{\footnotesize}
 
+\subsubsection*{\textbf{Selectori:} $Q_1, Q_0$}
+
 % --- Q3 ---
 \subsection{Implementarea etajului $Q_3$}
-\textbf{Selectori:} $Q_1, Q_0$ (Liniile hărții).
-Logica intrărilor $D_i$ depinde de $Q_2$ (Coloane).
+Logica intrărilor \textbf{MUX} depinde de $Q_2$.
 
 \begin{figure}[H]
     \centering
@@ -120,8 +121,7 @@ Logica intrărilor $D_i$ depinde de $Q_2$ (Coloane).
 
 % --- Q2 ---
 \subsection{Implementarea etajului $Q_2$}
-\textbf{Selectori:} $Q_1, Q_0$ (Liniile hărții).
-Logica intrărilor $D_i$ depinde de $Q_3$ (Coloane).
+Logica intrărilor \textbf{MUX} depinde de $Q_3$.
 
 \begin{figure}[H]
     \centering
@@ -192,8 +192,11 @@ Logica intrărilor $D_i$ depinde de $Q_3$ (Coloane).
             \node[left, align=right] at (startline) {\small \val};
         }
 
+        % Ieșiri CBB
         \draw[wire] ($(jk.east)+(0,0.5)$) -- ++(1,0) node[right] {$Q_2$};
         \draw[wire] ($(jk.east)+(0,-0.5)$) -- ++(1,0) node[right] {$\overline{Q_2}$};
+
+        % Selectori
         \draw[thick] (muxJ.south) -- (muxK.north);
         \draw[thick, <-] (muxK.south) -- ++(0, -0.5) node[below] {$Q_1, Q_0$};
     \end{tikzpicture}
@@ -205,8 +208,7 @@ Logica intrărilor $D_i$ depinde de $Q_3$ (Coloane).
 
 % --- Q1 ---
 \subsection{Implementarea etajului $Q_1$}
-\textbf{Selectori:} $Q_3, Q_2$ (Coloanele hărții).
-Logica intrărilor $D_i$ depinde de $Q_0$ (Linii).
+Logica intrărilor \textbf{MUX} depinde de $Q_3$ și $Q_2$.
 
 \begin{figure}[H]
     \centering
@@ -258,20 +260,20 @@ Logica intrărilor $D_i$ depinde de $Q_0$ (Linii).
 
         % Intrări
         \foreach \i/\lbl/\val in {
-            1.5/00/$Q_0 + \bar{P}\bar{C}$,
-            0.5/01/$Q_0 + \bar{H}$,
-            -0.5/10/$1$, 
-            -1.5/11/$Q_0 \cdot \bar{T}$
+          1.5/00/$\overline{Q_2}Q_3 + \overline{Q_2} \cdot \bar{P}\bar{C} + Q_2\overline{Q_3}\cdot \bar{H}$,
+          0.5/01/$\overline{Q_3} + \overline{Q_2} + \bar{T}$,
+            -0.5/10/$*$, 
+            -1.5/11/$*$
         } {
             \draw (muxJ.west) ++(0, 
             \i*\muxPinSpacing) -- node[midway, above, font=\tiny, inner sep=1pt] {\lbl} ++(-0.8, 0) coordinate(startline);
             \node[left, align=right] at (startline) {\small \val};
         }
         \foreach \i/\lbl/\val in {
-            1.5/00/$R$,
-            0.5/01/$1$, 
-            -0.5/10/$\overline{Q_0} \cdot \bar{R}$, 
-            -1.5/11/$Q_0$
+            1.5/00/$*$,
+            0.5/01/$*$, 
+            -0.5/10/$Q_2\overline{Q_3} + \overline{Q_3} \cdot R + \overline{Q_2}Q_3 \cdot \bar{R}$, 
+            -1.5/11/$Q_2 + \overline{Q_3} \cdot R$
         } {
             \draw (muxK.west) ++(0, \i*\muxPinSpacing) -- node[midway, above, font=\tiny, inner sep=1pt] {\lbl} ++(-0.8, 0) coordinate(startline);
             \node[left, align=right] at (startline) {\small \val};
@@ -280,7 +282,8 @@ Logica intrărilor $D_i$ depinde de $Q_0$ (Linii).
         \draw[wire] ($(jk.east)+(0,0.5)$) -- ++(1,0) node[right] {$Q_1$};
         \draw[wire] ($(jk.east)+(0,-0.5)$) -- ++(1,0) node[right] {$\overline{Q_1}$};
         \draw[thick] (muxJ.south) -- (muxK.north);
-        \draw[thick, <-] (muxK.south) -- ++(0, -0.5) node[below] {$Q_3, Q_2$};
+        % Intrări de selecție
+        \draw[thick, <-] (muxK.south) -- ++(0, -0.5) node[below] {$Q_1, Q_0$};
     \end{tikzpicture}
     }
     \caption{Implementarea grafică a etajului $Q_1$}
@@ -290,8 +293,7 @@ Logica intrărilor $D_i$ depinde de $Q_0$ (Linii).
 
 % --- Q0 ---
 \subsection{Implementarea etajului $Q_0$}
-\textbf{Selectori:} $Q_3, Q_2$ (Coloanele hărții).
-Logica intrărilor $D_i$ depinde de $Q_1$ (Linii).
+Logica intrărilor \textbf{MUX} depinde de $Q_3$ și $Q_2$.
 
 \begin{figure}[H]
     \centering
@@ -342,29 +344,32 @@ Logica intrărilor $D_i$ depinde de $Q_1$ (Linii).
 
         % Intrări
         \foreach \i/\lbl/\val in {
-          1.5/00/$\overline{Q_1} \cdot P +Q_1 \cdot \bar{R}$, 
-            0.5/01/$\overline{Q_1}$, 
-            -0.5/10/$Q_1 \cdot R$, 
-            -1.5/11/$1$
+          1.5/00/$Q_2 + \overline{Q_3} \cdot P$, 
+            0.5/01/$*$, 
+            -0.5/10/$Q_2Q_3 + Q_3 \cdot R + \overline{Q_2}\overline{Q_3} \cdot \bar{R}$, 
+            -1.5/11/$*$
         } {
             \draw (muxJ.west) 
             ++(0, \i*\muxPinSpacing) -- node[midway, above, font=\tiny, inner sep=1pt] {\lbl} ++(-0.8, 0) coordinate(startline);
             \node[left, align=right] at (startline) {\small \val};
         }
         \foreach \i/\lbl/\val in {
-            1.5/00/$Q_1 + R$, 
-            0.5/01/$1$, 
-            -0.5/10/$1$, 
-            -1.5/11/$\overline{Q_1}+\bar{T}$
+            1.5/00/$*$, 
+            0.5/01/$\overline{Q_3} + \overline{Q_2} + \bar{T}$, 
+            -0.5/10/$*$, 
+            -1.5/11/$Q_2 + Q_3 + R$
         } {
             \draw (muxK.west) ++(0, \i*\muxPinSpacing) -- node[midway, above, font=\tiny, inner sep=1pt] {\lbl} ++(-0.8, 0) coordinate(startline);
             \node[left, align=right] at (startline) {\small \val};
         }
 
+        % Ieșiri CBB
         \draw[wire] ($(jk.east)+(0,0.5)$) -- ++(1,0) node[right] {$Q_0$};
         \draw[wire] ($(jk.east)+(0,-0.5)$) -- ++(1,0) node[right] {$\overline{Q_0}$};
+
+        % Selectori
         \draw[thick] (muxJ.south) -- (muxK.north);
-        \draw[thick, <-] (muxK.south) -- ++(0, -0.5) node[below] {$Q_3, Q_2$};
+        \draw[thick, <-] (muxK.south) -- ++(0, -0.5) node[below] {$Q_1, Q_0$};
     \end{tikzpicture}
     }
     \caption{Implementarea grafică a etajului $Q_0$}
