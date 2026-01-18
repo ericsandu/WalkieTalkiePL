@@ -103,14 +103,14 @@
     
     % LD Input Bubble location
     \coordinate (ld_in) at ($(num.north west) + (-0.2, -0.9)$);
-    \draw[thin] (ld_in) circle (2pt); % Bubble
+    \draw[thin] (ld_in) circle (1.5pt); % Bubble
     \coordinate (ld_connect) at ($(ld_in) + (-0.23, 0)$); % Connection point left of bubble
     
     % 2. Draw the main path from OR to UP
     \draw[wire] (or.output) -- ++(0.5, 0) coordinate(split_point) |- (num_up_in);
     
     % 3. Draw the Branch to LD
-    \draw[wire] (split_point) -- ++(0, 0.2) |- (ld_connect) -- (ld_in);
+    \draw[wire] (split_point) -- ++(0, 0.2) node[above left, font=\scriptsize] {CTRL} |- (ld_connect) -- (ld_in);
     \fill (split_point) -- ++(0, 0.35) circle (1.5pt); % Connection dot
 
     % --- D. CLOCK ---
