@@ -5,49 +5,49 @@
 \hline
 \textbf{Stare} & \textbf{ID} & \textbf{TIP 1/0} & \textbf{INPCOD} & \textbf{ADR0} & \textbf{Nume} \\
 \hline
-$S_{0}$ & \texttt{00000} & \texttt{0} & \texttt{000000} & \texttt{1001} & IDLE \\
+$S_{0}$ & \texttt{00000} & \texttt{0} & \texttt{00000} & \texttt{1001} & IDLE \\
 \hline
-$S_{1}$ & \texttt{00001} & \texttt{1} & \texttt{100000} & \texttt{****} & INIT \\
+$S_{1}$ & \texttt{00001} & \texttt{1} & \texttt{00000} & \texttt{****} & INIT \\
 \hline
-$S_{2}$ & \texttt{00010} & \texttt{0} & \texttt{000100} & \texttt{0110} & SCAN \\
+$S_{2}$ & \texttt{00010} & \texttt{0} & \texttt{00100} & \texttt{0110} & SCAN \\
 \hline
-$S_{3}$ & \texttt{00011} & \texttt{0} & \texttt{000100} & \texttt{0110} & RETRY \\
+$S_{3}$ & \texttt{00011} & \texttt{0} & \texttt{00100} & \texttt{0110} & RETRY \\
 \hline
-$S_{4}$ & \texttt{00100} & \texttt{1} & \texttt{110000} & \texttt{****} & ERROR \\
+$S_{4}$ & \texttt{00100} & \texttt{1} & \texttt{10000} & \texttt{****} & ERROR \\
 \hline
-$S_{5}$ & \texttt{00101} & \texttt{0} & \texttt{011110} & \texttt{0000} & LOOP \\
+$S_{5}$ & \texttt{00101} & \texttt{0} & \texttt{11110} & \texttt{0000} & LOOP \\
 \hline
-$S_{6}$ & \texttt{00110} & \texttt{0} & \texttt{001110} & \texttt{0100} & SHAKE \\
+$S_{6}$ & \texttt{00110} & \texttt{0} & \texttt{01110} & \texttt{0100} & SHAKE \\
 \hline
-$S_{7}$ & \texttt{00111} & \texttt{1} & \texttt{100000} & \texttt{****} & SAVE \\
+$S_{7}$ & \texttt{00111} & \texttt{1} & \texttt{00000} & \texttt{****} & SAVE \\
 \hline
-$S_{8}$ & \texttt{01000} & \texttt{0} & \texttt{011110} & \texttt{0000} & SUCCESS \\
+$S_{8}$ & \texttt{01000} & \texttt{0} & \texttt{11110} & \texttt{0000} & SUCCESS \\
 \hline
-$S_{9}$ & \texttt{01001} & \texttt{0} & \texttt{000110} & \texttt{1101} & INTER \\
+$S_{9}$ & \texttt{01001} & \texttt{0} & \texttt{00110} & \texttt{1101} & INTER \\
 \hline
-$S_{10}$ & \texttt{01010} & \texttt{0} & \texttt{000011} & \texttt{0000} & WAIT \\
+$S_{10}$ & \texttt{01010} & \texttt{0} & \texttt{00011} & \texttt{0000} & WAIT \\
 \hline
-$S_{11}$ & \texttt{01011} & \texttt{1} & \texttt{101010} & \texttt{****} & LISTEN \\
+$S_{11}$ & \texttt{01011} & \texttt{1} & \texttt{01010} & \texttt{****} & LISTEN \\
 \hline
-$S_{12}$ & \texttt{01100} & \texttt{0} & \texttt{011110} & \texttt{1010} & LOOP \\
+$S_{12}$ & \texttt{01100} & \texttt{0} & \texttt{11110} & \texttt{1010} & LOOP \\
 \hline
-$S_{13}$ & \texttt{01101} & \texttt{0} & \texttt{001000} & \texttt{1111} & FLIP \\
+$S_{13}$ & \texttt{01101} & \texttt{0} & \texttt{01000} & \texttt{1111} & FLIP \\
 \hline
-$S_{14}$ & \texttt{01110} & \texttt{0} & \texttt{011110} & \texttt{1010} & CH1 \\
+$S_{14}$ & \texttt{01110} & \texttt{0} & \texttt{11110} & \texttt{1010} & CH1 \\
 \hline
-$S_{15}$ & \texttt{01111} & \texttt{0} & \texttt{011110} & \texttt{1010} & CH2 \\
+$S_{15}$ & \texttt{01111} & \texttt{0} & \texttt{11110} & \texttt{1010} & CH2 \\
 \hline
-$S_{16}$ & \texttt{10000} & \texttt{0} & \texttt{001010} & \texttt{0000} & INTER \\
+$S_{16}$ & \texttt{10000} & \texttt{0} & \texttt{01010} & \texttt{0000} & INTER \\
 \hline
-$S_{17}$ & \texttt{10001} & \texttt{1} & \texttt{100000} & \texttt{****} & PRE\_TX \\
+$S_{17}$ & \texttt{10001} & \texttt{1} & \texttt{00000} & \texttt{****} & PRE\_TX \\
 \hline
-$S_{18}$ & \texttt{10010} & \texttt{1} & \texttt{100101} & \texttt{****} & TRANSMIT \\
+$S_{18}$ & \texttt{10010} & \texttt{1} & \texttt{00101} & \texttt{****} & TRANSMIT \\
 \hline
-$S_{19}$ & \texttt{10011} & \texttt{0} & \texttt{001101} & \texttt{0010} & INTER \\
+$S_{19}$ & \texttt{10011} & \texttt{0} & \texttt{01101} & \texttt{0010} & INTER \\
 \hline
-$S_{20}$ & \texttt{10100} & \texttt{1} & \texttt{100000} & \texttt{****} & POST \\
+$S_{20}$ & \texttt{10100} & \texttt{1} & \texttt{00000} & \texttt{****} & POST \\
 \hline
-$S_{21}$ & \texttt{10101} & \texttt{0} & \texttt{011110} & \texttt{0000} & LOG \\
+$S_{21}$ & \texttt{10101} & \texttt{0} & \texttt{11110} & \texttt{0000} & LOG \\
 \hline
 \end{tabular}
 \caption{Conținutul memoriei de microprogram}
