@@ -1,0 +1,62 @@
+\subsubsection{Memorie}
+Pentru implementarea memoriei de comandă, s-au luat în considerare următoarele cerințe:
+\begin{itemize}
+    \item \textbf{Lungimea microinstrucțiunilor:} 10 biți (necesar $\ge 8$).
+    \item \textbf{Număr de stări:} 22 (necesar $\ge 16$).
+\end{itemize}
+
+\textbf{Soluția aleasă:}
+S-a optat pentru utilizarea a 3 memorii de 4 biți și 64 cuvinte, model \textbf{CAT22C10} (SRAM/EEPROM), conectate în paralel.
+\begin{itemize}
+    \item Deși modelul 74HC7403 (Phillips) a fost considerat, CAT22C10 este utilizat mai frecvent.
+    \item Prin legarea în paralel, se obțin disponibili 12 biți, dintre care 2 vor rămâne neutilizați.
+\end{itemize}
+
+\subsubsection{Multiplexare}
+Gestionarea tranzițiilor de stare necesită selectarea sursei pentru adresa următoare.
+\begin{itemize}
+    \item \textbf{Cerințe:} Sunt necesare 16 intrări (pentru a acomoda cele 9 inputuri de sistem plus logica internă) și 4 biți de selecție.
+    \item \textbf{Soluția aleasă:} Un multiplexor 16-la-1 din familia 54150, specific modelul \textbf{SN54150}.
+\end{itemize}
+
+\subsubsection{Numărătoare}
+Pentru secvențierea stărilor, este necesar un sistem de numărare capabil să adreseze cele 22 de stări.
+\begin{itemize}
+    \item \textbf{Adresare:} 22 de stări necesită adrese de 5 biți, deoarece $2^4 = 16 < 22 < 2^5 = 32$.
+    \item \textbf{Soluția aleasă:} Două numărătoare de 4 biți conectate în cascadă. S-a decis utilizarea cipului \textbf{SN54192} (în detrimentul 74HC161) datorită familiarității.
+    \item \textbf{Conexiune:} Pinul de \textit{Carry} al numărătorului de biți mai puțin semnificativi trebuie conectat la pinul \textit{Load/Up} al numărătorului mai semnificativ.
+\end{itemize}
+
+\subsubsection{Masca și Porțile Logice}
+Logica de control și mascare necesită următoarele componente discrete:
+\begin{itemize}
+    \item \textbf{Porți AND:} Sunt necesare 5 porți (una pentru fiecare output). Se vor folosi 2 cipuri \textbf{74HC08} (care oferă un total de 8 porți).
+    \item \textbf{Invertor:} Este necesar un invertor pentru intrările multiplexorului, asigurat de un cip \textbf{74HC04}.
+    \item \textbf{Porți OR:} Este necesar un cip \textbf{74HC32} pentru a decide logica dintre incrementarea numărătorului (+1) sau încărcarea adresei de salt (ADRO).
+\end{itemize}
+
+\subsubsection{Detalii Tehnice și Pinout}
+
+Mai jos sunt detaliile pinilor pentru componentele principale identificate în documentație:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Componentă} & \textbf{Pin} & \textbf{Funcție/Descriere} \\ \hline
+\textbf{CAT22C10} & 8 & $V_{SS}$ (GND) \\
+(Memorie) & 18 & $V_{CC}$ \\
+ & 1-7 & Adrese ($A_0 - A_5$) și NC \\
+ & 11 & WE (Write Enable) \\ \hline
+\textbf{SN54150} & 24 & $V_{CC}$ \\
+(Multiplexor) & 12 & GND \\
+ & 11, 13-15 & Selecție ($S_0 - S_3$) \\
+ & 10 & Output Inverted ($\bar{W}$) \\ \hline
+\textbf{SN54192} & 16 & $V_{CC}$ \\
+(Counter) & 8 & GND \\
+ & 5 & UP (Count Up) \\
+ & 4 & DOWN (Count Down) \\
+ & 11 & $\overline{LOAD}$ \\ \hline
+\end{tabular}
+\caption{Selecție pini relevanți}
+\end{table}

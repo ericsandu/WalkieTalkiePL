@@ -74,10 +74,6 @@
     
     % 1. INPCOD -> MUX (Vertical Drop)
     \draw[bus] (inpcod_center) -- (mux.north);
-    % Decorative ticks
-    \foreach \x in {-0.6, -0.2, 0.2, 0.6} {
-        \draw ($(mux.north)+(\x,0)$) -- ++(0, 0.3);
-    }
     
     % 2. ADR 0 -> NUM (Route Right then Down)
     \draw[bus] (adr0_center) -- ++(0,-1.5) -| ($(num.north) + (0.5, 0.5)$) -- ($(num.north) + (0.5, 0)$);
