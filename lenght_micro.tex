@@ -1,0 +1,66 @@
+\subsubsection{Date de intrare}
+Conform specificațiilor organigramei, parametrii sistemului sunt:
+\begin{itemize}
+    \item Număr de stări ($N_{stari}$): 22
+    \item Număr variabile de intrare ($N_{in}$): 9
+    \item Număr variabile de ieșire ($N_{out}$): 5
+\end{itemize}
+
+\subsubsection{Dimensionarea câmpurilor}
+
+\begin{enumerate}
+    \item \textbf{Câmpul de adresare ($n_{adr}$):}
+    Numărul de biți necesari pentru a adresa unic cele 22 de stări se calculează logaritmic:
+    \[
+    n_{adr} = \log_2(N_{stari}) = \log_2(22)
+    \]
+    Deoarece $2^4 = 16 < 22 \leq 32 = 2^5$:
+    \[
+    n_{adr} = 5 \text{ biți}
+    \]
+
+    \item \textbf{Câmpul condițiilor de intrare ($n_{ci}$):}
+    Pentru a selecta una dintre cele 9 variabile de intrare (condiții de test), calculăm:
+    \[
+    n_{ci} = \log_2(N_{in}) = \log_2(9)
+    \]
+    Deoarece $2^3 = 8 < 9 \leq 16 = 2^4$:
+    \[
+    n_{ci} = 4 \text{ biți}
+    \]
+
+    Astfel va fi folosit un \textbf{MUX 16:1} pentru schema unității de comandă.
+
+    \item \textbf{Câmpul de ieșire ($n_{out}$):}
+    În formatul variabil, pentru instrucțiunile de tip 0 (comandă), biții sunt alocați direct variabilelor de ieșire.
+    \[
+    n_{out} = 5 \text{ biți}
+    \]
+\end{enumerate}
+
+\subsection{Aplicarea formulei și rezultatul final}
+
+Lungimea microinstrucțiunii este determinată de maximul dintre lungimea necesară pentru instrucțiunile de salt (Tip 1) și cele de comandă (Tip 0), plus bitul de selecție a formatului:
+
+\[
+L_{\mu i} = 1 + \max(\underbrace{n_{ci} + n_{adr}}_{\text{Tip 1}}, \underbrace{n_{out}}_{\text{Tip 0}})
+\]
+
+Înlocuind valorile calculate:
+
+\[
+L_{\mu i} = 1 + \max(4 + 5, 5)
+\]
+\[
+L_{\mu i} = 1 + \max(9, 5)
+\]
+\[
+L_{\mu i} = 1 + 9 = 10 \text{ biți}
+\]
+
+\textbf{Concluzie:} Lungimea microinstrucțiunii în format variabil este de \textbf{10 biți}, structurată astfel:
+\begin{itemize}
+    \item \textbf{Bit 9:} Selector format (1 bit).
+    \item \textbf{Biții 8-0 (Tip 1):} 4 biți pentru condiționale + 5 biți pentru adresele stărilor.
+    \item \textbf{Biții 8-0 (Tip 0):} 5 biți utilizați pentru Ieșiri (restul de 4 biți fiind neutilizați).
+\end{itemize}
