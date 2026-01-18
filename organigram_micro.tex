@@ -165,7 +165,7 @@
         \path (mic_led) edge (S19);
         \path (S19) edge (d_inv_ptt);
         
-        \draw (d_inv_ptt.south) -- ++(0, -0.4) -| (S18.south);
+        \draw (d_inv_ptt.south) -- ++(0, -0.4) node[right] {0} -| (S18.south);
         \path (d_inv_ptt) edge node[left] {1} (S20);
         \path (S20) edge (S21);
         \path (S21) edge (false_106);
@@ -175,5 +175,4 @@
     \end{tikzpicture}
     } % End resizebox
     \caption{Organigrama adaptată pentru implementarea cu microinstrucțiuni}
-    \label{fig:drawio_full_translated_spaced_binary}
 \end{figure}
