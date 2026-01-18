@@ -140,7 +140,7 @@
         
         \path (S13) edge (d_inv_bit);
         \path (d_inv_bit) edge node[above] {1} (S14);
-        \path (d_inv_bit) edge node[right] {0} (S15);
+        \draw (d_inv_bit.south) -- ++(0, -0.5) node[below] {0} -| (S15.north);
         
         \draw (S14.east) -- ++(0.75, 0) |- (false_85.east);
         \path (S15) edge (false_85);
