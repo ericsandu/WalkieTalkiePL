@@ -1,0 +1,158 @@
+\begin{tikzpicture}[
+    >={Stealth}, % Default arrow tip
+    % --- Styles ---
+    % Main blocks
+    block/.style={draw, rectangle, minimum height=1cm, inner sep=5pt, align=center},
+    % MUX style
+    mux/.style={draw, rectangle, minimum width=3cm, minimum height=8.5cm},
+    % Bus style (double lines) with explicit arrow tip
+    bus/.style={double, double distance=1.5pt, line width=0.8pt, -{Stealth[length=3mm, width=2mm]}},
+    % Simple wire style with filled arrow
+    wire/.style={line width=0.8pt, ->},
+    % Plain line (no arrow) used for segments before a turn
+    line/.style={line width=0.8pt},
+    % Logic gates
+    logic/.style={draw, logic gate inputs=nn},
+    % Node alignment
+    every node/.style={align=center}
+]
+
+    % 1. TOP MEMORY / INSTRUCTION REGISTER (ROM)
+    \node[inner sep=0pt] (rom) {
+        \renewcommand{\arraystretch}{1.8}
+        \setlength{\tabcolsep}{0pt}
+        \begin{tabular}{|>{\centering\arraybackslash}p{1.2cm}|>{\centering\arraybackslash}p{2.8cm}|>{\centering\arraybackslash}p{3.2cm}|}
+            \hline
+            TIP 1 & \multicolumn{2}{c|}{SEMNALE DE IE\c{S}IRE} \\
+            \hline
+            TIP 0 & \textcolor{green!60!black}{INPCOD} & \textcolor{red!80!black}{ADR 0} \\
+            \hline
+        \end{tabular}
+    };
+
+    % --- Define Accurate Anchors ---
+    \coordinate (tip0_center) at ($(rom.south west) + (0.6, 0)$); 
+    \coordinate (inpcod_center) at ($(rom.south west) + (2.6, 0)$); 
+    \coordinate (adr0_center) at ($(rom.south west) + (5.6, 0)$); 
+    
+    % Anchors for right-side connections
+    \coordinate (semnale_exit) at ($(rom.north east)!0.5!(rom.east)$); 
+    \coordinate (adr0_side_entry) at ($(rom.south east)!0.5!(rom.east)$);    
+
+    % 2. COMPONENT PLACEMENT
+    
+    % MUX: Positioned directly below INPCOD center
+    \node[mux] (mux) at ($(inpcod_center) + (0, -6.5)$) {}; 
+    
+    % MASCA: To the right of Semnale
+    \node[block, right=2.5cm of semnale_exit, anchor=west] (masca) {MASCA};
+    \node[right=1.0cm of masca] (out_arrow) {OUT};
+
+    % OR Gate: Positioned relative to MUX
+    \node[or gate US, draw, logic gate inputs=nn, rotate=0] (or) at ($(mux.east) + (1.5, 0)$) {};
+
+    % NUM: Positioned to the right of OR gate
+    \node[block, minimum width=2cm, minimum height=2.5cm] (num) at ($(or.east) + (2.5, -0)$) {NUM};
+
+    % 3. WIRING
+
+    % --- A. CONTROL LINE (TIP 0) ---
+    \coordinate (ctrl_level) at ($(rom.south) + (0, -0.7)$); 
+    
+    % 1. Drop down from TIP 0
+    \draw (tip0_center) -- (tip0_center |- ctrl_level);
+    
+    % 2. Horizontal run to MASCA center
+    \draw[wire] (tip0_center |- ctrl_level) -- (masca.south |- ctrl_level) -| (masca.south);
+    
+    % 3. Branch to Logic (OR gate input 2) - Shifted LEFT
+    \coordinate (logic_split) at ($(or.input 2 |- ctrl_level) - (0.4, 0)$);
+    \draw[wire] (logic_split) |- (or.input 2);
+    \fill (logic_split) circle (1.5pt); % Connection dot
+
+    % --- B. BUSES ---
+    
+    % 1. INPCOD -> MUX (Vertical Drop)
+    \draw[bus] (inpcod_center) -- (mux.north);
+    % Decorative ticks
+    \foreach \x in {-0.6, -0.2, 0.2, 0.6} {
+        \draw ($(mux.north)+(\x,0)$) -- ++(0, 0.3);
+    }
+    
+    % 2. ADR 0 -> NUM (Route Right then Down)
+    \draw[bus] (adr0_center) -- ++(0,-1.5) -| ($(num.north) + (0.5, 0.5)$) -- ($(num.north) + (0.5, 0)$);
+
+    % 3. SEMNALE -> MASCA
+    \draw[bus] (semnale_exit) -- (masca.west);
+    
+    % 4. MASCA -> OUT
+    \draw[bus] (masca.east) -- (out_arrow.west);
+
+    % 5. FEEDBACK: NUM -> ADR 0 (Side Entry)
+    \draw[bus] (num.east) -- ++(0.5,0) |- (adr0_side_entry);
+    
+    % --- C. LOGIC CONNECTIONS ---
+    
+    % MUX Output -> OR Input 1
+    \draw[wire] (mux.east) |- (or.input 1);
+    
+    % OR Output -> NUM UP & Branch to LD
+    % 1. Define specific target points
+    \coordinate (up_label_pos) at ($(num.north west) + (0.1, -0.3)$);
+    \coordinate (num_up_in) at (num.west |- up_label_pos);
+    
+    % LD Input Bubble location
+    \coordinate (ld_in) at ($(num.north west) + (-0.2, -0.9)$);
+    \draw[thin] (ld_in) circle (2pt); % Bubble
+    \coordinate (ld_connect) at ($(ld_in) + (-0.23, 0)$); % Connection point left of bubble
+    
+    % 2. Draw the main path from OR to UP
+    \draw[wire] (or.output) -- ++(0.5, 0) coordinate(split_point) |- (num_up_in);
+    
+    % 3. Draw the Branch to LD
+    \draw[wire] (split_point) -- ++(0, 0.2) |- (ld_connect) -- (ld_in);
+    \fill (split_point) -- ++(0, 0.35) circle (1.5pt); % Connection dot
+
+    % --- D. CLOCK ---
+    \draw[wire] ($(num.south) + (0,-0.8)$) -- (num.south);
+    \node[right, font=\scriptsize] at ($(num.south) + (0,-0.6)$) {CEAS};
+
+    % --- E. LABELS & PINS ---
+    
+    \node[anchor=east] at ($(mux.east) + (-0.5, 0.5)$) {\large MUX};
+    \node[anchor=east] at ($(mux.east) + (-0.55, 0)$) {16 : 1};
+    \node at ($(mux.south) + (0,-0.25)$) {$\overline{EN}$};
+
+    % MUX Input Pins with Arrows
+    % Note: Underscores in labels must be escaped (e.g., RX\_SIG)
+    \foreach \i/\lbl/\inv/\bin [count=\y from 0] in {
+        0/PAIR/0/0000, 
+        1/RX\_SIG/0/0001, 
+        2/RX\_SIG/1/0010, 
+        3/CH\_BTN/1/0011,
+        4/CH\_BIT/1/0100, 
+        5/PTT/0/0101, 
+        6/PTT/1/0110, 
+        7/HS\_OK/0/0111,
+        8/{*}/0/{......}, 
+        9/{0}/0/1111%
+    } {
+        \coordinate (pin\y) at ($(mux.north west)!0.1 + 0.09*\y!(mux.south west)$);
+        \node[anchor=west, font=\scriptsize] at ($(pin\y) + (0.1,0)$) {\bin};
+        
+        \ifnum\inv=1
+            \draw[thin] ($(pin\y) + (-0.3,0)$) circle (2pt);
+            \draw (pin\y) -- ($(pin\y) + (-0.23,0)$); 
+            \draw[wire] ($(pin\y) + (-1.2,0)$) -- ($(pin\y) + (-0.37,0)$);
+            \node[anchor=east] at ($(pin\y) + (-1.2,0)$) {\lbl};
+        \else
+            \draw[wire] ($(pin\y) + (-1.2,0)$) -- (pin\y);
+            \node[anchor=east] at ($(pin\y) + (-1.2,0)$) {\lbl};
+        \fi
+    }
+
+    % NUM Labels
+    \node[anchor=west, font=\scriptsize] at ($(num.north west) + (0, -0.3)$) {UP};
+    \node[anchor=west, font=\scriptsize] at ($(num.north west) + (0,-0.9)$) {LD};
+
+\end{tikzpicture}

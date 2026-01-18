@@ -4,13 +4,14 @@
 \usepackage[T1]{fontenc}
 \usepackage[romanian]{babel}
 \usepackage[table]{xcolor}
+\usepackage{array}
 \usepackage{graphicx}
 \usepackage{geometry}
 \usepackage{diagbox}
 \usepackage{amsmath}
 \usepackage{float}
 \usepackage{tikz}
-\usetikzlibrary{shapes, arrows, positioning, circuits.logic.US, calc, fit, backgrounds}
+\usetikzlibrary{shapes, arrows, arrows.meta, positioning, circuits.logic.US, calc, fit, backgrounds}
 
 % Setări pagină
 \geometry{margin=2.5cm}
@@ -63,8 +64,8 @@
 \input{lenght_micro.tex}
 
 % 10. Proiectarea unității de comandă microprogramată
-% \section{Proiectarea unității de comandă microprogramată}
-% \input{control_unit.tex}
+\subsection{Proiectarea unității de comandă microprogramată}
+\input{control_unit.tex}
 %
 % TBD:
 % % 11. Alegerea componentelor digitale
@@ -74,5 +75,4 @@
 % % 12. Completarea memoriei de microprogram
 % \section{Completarea memoriei de microprogram}
 % \input{memory.tex}
-
 \end{document}
