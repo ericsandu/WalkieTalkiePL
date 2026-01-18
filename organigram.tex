@@ -7,7 +7,7 @@ Organigrama din Figura \ref{fig:organigram} descrie fluxul logic al automatului,
     % Stiluri
     \tikzstyle{state} = [circle, draw, minimum size=1.0cm, align=center, fill=white, font=\footnotesize\bfseries, inner sep=0pt]
     \tikzstyle{moore} = [circle split, draw, minimum size=1.1cm, align=center, fill=cyan!15, font=\footnotesize\bfseries, inner sep=1pt]
-    \tikzstyle{decision} = [diamond, draw, aspect=2.5, inner sep=0pt, minimum width=2.0cm, align=center, fill=yellow!15, font=\scriptsize]
+    \tikzstyle{decision} = [diamond, draw, aspect=2.5, inner sep=0pt, minimum width=1.6cm, minimum height=1.2cm, align=center, fill=yellow!15, font=\scriptsize]
 
     \begin{tikzpicture}[->, >=latex', shorten >=1pt, auto, node distance=2cm, semithick, font=\footnotesize]
 
@@ -64,7 +64,7 @@ Organigrama din Figura \ref{fig:organigram} descrie fluxul logic al automatului,
         \path (d_pair) edge node[right] {0} (d_ch);
         \path (d_ch) edge node[above] {1} node[below, pos=0.575, font=\scriptsize, align=center] {(din CH2)} (S8);
         \draw [->] (d_ch.east) -- ++(0.8,0) |- node[pos=0.7, below, font=\scriptsize] {(din CH1)} (S9.west);
-        \draw [->] (S8.east) -- ++(0.5,0) |- (S10);
+        \draw [->] (S8.east) -- ++(0.25,0) |- (S10);
         \draw (S9) |- (S10);
         \path (d_ch) edge node[right] {0} (S10);
         \path (S10) edge (d_rx);

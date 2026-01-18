@@ -1,0 +1,179 @@
+\begin{figure}[ht!]
+    \centering
+    \usetikzlibrary{shapes.multipart, arrows, positioning, calc}
+    
+    % Resize logic: Scale to width, but ensure height doesn't exceed page limits
+    \resizebox{\textwidth}{!}{%
+    \begin{tikzpicture}[->, >=latex', shorten >=1pt, auto, node distance=1.2cm, semithick, font=\footnotesize]
+
+        % Styles from organigram.tex
+        \tikzstyle{state} = [circle, draw, minimum size=0.9cm, align=center, fill=white, font=\footnotesize\bfseries, inner sep=0pt]
+        \tikzstyle{moore} = [circle split, draw, minimum size=1.0cm, align=center, fill=cyan!15, font=\footnotesize\bfseries, inner sep=1pt]
+        \tikzstyle{decision} = [diamond, draw, aspect=2.0, inner sep=0pt, minimum width=1.4cm, minimum height=1.2cm, align=center, fill=yellow!15, font=\scriptsize]
+        \tikzstyle{output} = [rectangle, draw, rounded corners, minimum height=0.5cm, align=center, fill=cyan!15, font=\scriptsize]
+
+        % --- CENTRAL SPINE ---
+        % ID 0: S0 IDLE
+        \node[state] (S0) {S0\\IDLE};
+        
+        \node[decision, below=1.2cm of S0] (d_pair) {PAIR};
+
+        % --- LEFT BRANCH (Pairing) ---
+        % ID 1: S1 INIT
+        \node[state, left=2.2cm of d_pair] (S1) {S1\\INIT};
+        
+        % ID 2: S2 SCAN
+        \node[state, below=1.2cm of S1] (S2) {S2\\SCAN};
+        \node[decision, below=1.2cm of S2] (d_rx1) {$\overline{RX\_SIG}$};
+        
+        % ID 6: S3 RETRY (Source ID 3)
+        \node[state, left=1.2cm of d_rx1] (S3) {S3\\RETRY};
+        
+        % ID 3: S4 SHAKE (Source ID 6)
+        \node[state, below=1.2cm of d_rx1] (S6) {S6\\SHAKE};
+        \node[decision, below=1.2cm of S6] (d_hs) {HS\_OK};
+        
+        % ID 7: S7 ERR (Source ID 4)
+        \node[state, left=1.2cm of d_hs] (S4) {S4\\ERR};
+        \node[output, below=1.0cm of S4] (err_led) {ERR\_LED};
+        
+        % ID 8: Loop Helper (Source I7 5)
+        \node[state, below=1.0cm of err_led] (S5) {S5\\LOOP};
+        \node[decision, below=1.0cm of S5] (false_34) {\large{0}};
+        
+        % ID 4: S5 SAVE (Source ID S7)
+        \node[state, right=1.2cm of d_hs] (S7) {S7\\SAVE};
+        
+        % ID 5: S6 SUCC (Source ID 8)
+        \node[state, below=1.0cm of S7] (S8) {S8\\SUCC};
+
+        % --- RIGHT BRANCH (Channel) ---
+        % ID 9: Intermediary (Source ID 9)
+        \node[state, right=2.0cm of d_pair] (S9) {S9\\INTRM};
+        \node[decision, below=1.0cm of S9] (d_inv_ch) {$\overline{CH\_BTN}$};
+        
+        % ID 13: Channel Flip (Source ID 13)
+        \node[state, right=1.5cm of d_inv_ch] (S13) {S13\\FLIP};
+        \node[decision, right=0.5cm of S13] (d_inv_bit) {$\overline{CH\_BIT}$};
+        
+        % ID 14: S8 CH1 (Source ID 14)
+        \node[state, right=0.6cm of d_inv_bit] (S14) {S14\\CH1};
+        
+        % ID 15: S9 CH2 (Source ID 15)
+        \node[state, below=1.0cm of S14] (S15) {S15\\CH2};
+        
+        % Logic ID 85: Always False
+        \node[decision, below=2.5cm of S14] (false_85) {\large{0}};
+
+        % --- WAIT & RX BRANCH ---
+        % ID 10: S10 WAIT
+        \node[state, below=1.2cm of d_inv_ch] (S10) {S10\\WAIT};
+        \node[decision, below=1.2cm of S10] (d_rx2) {RX\_SIG};
+        
+        % ID 11: S11 LSTN
+        \node[state, right=1.6cm of d_rx2] (S11) {S11\\LSTN};
+        \node[output, right=0.3cm of S11] (spk_led) {SPK\_EN\\RX\_LED};
+        
+        % ID 12: Loop Helper (Source ID 12)
+        \node[state, right=0.3cm of spk_led] (S12) {S12\\LOOP};
+
+        % --- TX BRANCH ---
+        % ID 16: Intermediary (Source ID 16)
+        \node[state, below=1.2cm of d_rx2] (S16) {S16\\INTRM};
+        \node[decision, below=1.0cm of S16] (d_ptt) {PTT};
+        
+        % ID 17: S12 PRE_TX (Source ID 17)
+        \node[state, below=1.2cm of d_ptt] (S17) {S17\\PRE\_TX};
+        
+        % ID 18: S13 TRSM (Source ID 18)
+        \node[state, below=1.2cm of S17] (S18) {S18\\TRSM};
+        \node[output, right=0.5cm of S18] (mic_led) {MIC\_EN\\TX\_LED};
+        
+        % ID 19: Intermediary (Source ID 19)
+        \node[state, right=0.5cm of mic_led] (S19) {S19\\INTRM};
+        \node[decision, right=0.5cm of S19] (d_inv_ptt) {$\overline{PTT}$};
+        
+        % ID 20: S14 POST (Source ID 20)
+        \node[state, above=1.5cm of d_inv_ptt] (S20) {S20\\POST};
+        
+        % ID 21: S15 LOG (Source ID 21)
+        \node[state, right=0.6cm of S20] (S21) {S21\\LOG};
+        \node[decision, right=0.6cm of S21] (false_106) {\large{0}};
+
+        % --- EDGES ---
+
+        % 1. Start
+        \path (S0) edge (d_pair);
+
+        % 2. Pairing
+        \path (d_pair) edge node[above] {1} (S1);
+        \path (S1) edge (S2);
+        \path (S2) edge (d_rx1);
+        
+        % Retry (ID 6)
+        \path (d_rx1) edge node[above] {1} (S3);
+        \path (S3) edge (d_rx1);
+        
+        % Shake (ID 3)
+        \path (d_rx1) edge node[right] {0} (S6);
+        \path (S6) edge (d_hs);
+        
+        % HS Outcomes
+        \path (d_hs) edge node[above] {1} (S4);
+        \path (d_hs) edge node[above] {0} (S7);
+        
+        \path (S7) edge (S8);
+        \draw (S8.south) |- (false_34.east);
+        
+        \path (S4) edge (err_led);
+        \path (err_led) edge (S5);
+        \path (S5) edge (false_34);
+        
+        \draw [dashed, rounded corners] (false_34.west) -- ++(-3.0, 0) |- (S0.west);
+
+        % 3. Channel
+        \path (d_pair) edge node[above] {0} (S9);
+        \path (S9) edge (d_inv_ch);
+        
+        \path (d_inv_ch) edge node[right] {1} (S10);
+        \path (d_inv_ch) edge node[above] {0} (S13);
+        
+        \path (S13) edge (d_inv_bit);
+        \path (d_inv_bit) edge node[above] {1} (S14);
+        \path (d_inv_bit) edge node[right] {0} (S15);
+        
+        \draw (S14.east) -- ++(0.75, 0) |- (false_85.east);
+        \path (S15) edge (false_85);
+        \draw (false_85.west) -| (S10.south);
+
+        % 4. Wait & RX
+        \path (S10) edge (d_rx2);
+        
+        \path (d_rx2) edge node[above] {1} (S11);
+        \path (S11) edge (spk_led);
+        \path (spk_led) edge (S12);
+        \path (S12) edge (false_85);
+
+        % 5. TX
+        \path (d_rx2) edge node[right] {0} (S16);
+        \path (S16) edge (d_ptt);
+        
+        \draw [dashed] (d_ptt.east) -- ++(8.5, 0) |- (S0.east);
+        \path (d_ptt) edge node[right] {1} (S17);
+        \path (S17) edge (S18);
+        \path (S18) edge (mic_led);
+        \path (mic_led) edge (S19);
+        \path (S19) edge (d_inv_ptt);
+        
+        \draw (d_inv_ptt.south) -- ++(0, -0.4) -| (S18.south);
+        \path (d_inv_ptt) edge node[left] {1} (S20);
+        \path (S20) edge (S21);
+        \path (S21) edge (false_106);
+        
+        \draw [dashed, rounded corners] (false_106.north) |- (S0.east);
+
+    \end{tikzpicture}
+    } % End resizebox
+    \caption{Organigrama adaptată pentru implementarea cu microinstrucțiuni}
+    \label{fig:drawio_full_translated_spaced_binary}
+\end{figure}
