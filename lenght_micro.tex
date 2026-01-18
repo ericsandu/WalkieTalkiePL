@@ -16,7 +16,11 @@ Conform specificațiilor organigramei, parametrii sistemului sunt:
     \]
     Deoarece $2^4 = 16 < 22 \leq 32 = 2^5$:
     \[
-    n_{adr} = 5 \text{ biți}
+    n_{adr\_necesar} = 5 \text{ biți}
+    \]
+  Vom alege memoria de tip \textbf{64 x 4} pentru implementarea microinstrucțiunilor așa încât:
+    \[
+    n_{adr} = \log_2(64) = 6 \text{ biți}
     \]
 
     \item \textbf{Câmpul condițiilor de intrare ($n_{ci}$):}
@@ -49,18 +53,20 @@ L_{\mu i} = 1 + \max(\underbrace{n_{ci} + n_{adr}}_{\text{Tip 1}}, \underbrace{n
 Înlocuind valorile calculate:
 
 \[
-L_{\mu i} = 1 + \max(4 + 5, 5)
+L_{\mu i} = 1 + \max(4 + 6, 5)
 \]
 \[
 L_{\mu i} = 1 + \max(9, 5)
 \]
 \[
-L_{\mu i} = 1 + 9 = 10 \text{ biți}
+L_{\mu i} = 1 + 9 = 11 \text{ biți}
 \]
 
-\textbf{Concluzie:} Lungimea microinstrucțiunii în format variabil este de \textbf{10 biți}, structurată astfel:
+\textbf{Concluzie:} Lungimea microinstrucțiunii în format variabil este de \textbf{11 biți}, structurată astfel:
 \begin{itemize}
-    \item \textbf{Bit 9:} Selector format (1 bit).
-    \item \textbf{Biții 8-0 (Tip 1):} 4 biți pentru condiționale + 5 biți pentru adresele stărilor.
-    \item \textbf{Biții 8-0 (Tip 0):} 5 biți utilizați pentru Ieșiri (restul de 4 biți fiind neutilizați).
+    \item \textbf{Bit 10:} Selector format (1 bit).
+    \item \textbf{Biții 9-0 (Tip 1):} 4 biți pentru condiționale + 6 biți pentru adresele stărilor (primul bit pentru adresele stărilor va fi mereu 0, deoarece sunt doar 5 biți de adresă necesari).
+    \item \textbf{Biții 9-0 (Tip 0):} 5 biți utilizați pentru Ieșiri (restul de 4 biți fiind neutilizați).
 \end{itemize}
+
+  Vom concatena \textbf{3 circuite} de memorie \textbf{64 x 4} pentru implementarea dispozitivului.
